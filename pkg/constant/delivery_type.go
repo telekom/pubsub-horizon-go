@@ -30,7 +30,7 @@ func ParseDeliveryType(s string) (DeliveryType, error) {
 func (t *DeliveryType) UnmarshalJSON(bytes []byte) error {
 	var data = string(bytes)
 
-	if string(data) == "null" {
+	if data == "null" {
 		return nil
 	}
 
