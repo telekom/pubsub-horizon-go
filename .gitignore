@@ -1,0 +1,10 @@
+.idea
+.vscode
+.fleet
+
+*.exe
+*.cmd
+*.bat
+*.yml
+
+!.gitlab-ci.yml
