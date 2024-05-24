@@ -1,4 +1,4 @@
-package constant
+package enum
 
 import (
 	"github.com/stretchr/testify/assert"
