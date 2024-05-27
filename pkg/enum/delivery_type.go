@@ -2,6 +2,7 @@ package enum
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -32,6 +33,10 @@ func (t *DeliveryType) UnmarshalJSON(bytes []byte) error {
 
 	if data == "null" {
 		return nil
+	}
+
+	if strings.HasPrefix(data, `"`) && strings.HasSuffix(data, `"`) {
+		data, _ = strconv.Unquote(data)
 	}
 
 	deliveryType, err := ParseDeliveryType(data)

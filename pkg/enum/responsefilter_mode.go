@@ -2,6 +2,7 @@ package enum
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -29,6 +30,10 @@ func (m *ResponseFilterMode) UnmarshalJSON(bytes []byte) error {
 
 	if data == "null" {
 		return nil
+	}
+
+	if strings.HasPrefix(data, `"`) && strings.HasSuffix(data, `"`) {
+		data, _ = strconv.Unquote(data)
 	}
 
 	rfm, err := ParseResponseFilterMode(data)

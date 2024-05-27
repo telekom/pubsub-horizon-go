@@ -2,6 +2,8 @@ package enum
 
 import (
 	"errors"
+	"strconv"
+	"strings"
 )
 
 type MessageStatus string
@@ -33,6 +35,10 @@ func (ms *MessageStatus) UnmarshalJSON(bytes []byte) error {
 
 	if data == "null" {
 		return nil
+	}
+
+	if strings.HasPrefix(data, `"`) && strings.HasSuffix(data, `"`) {
+		data, _ = strconv.Unquote(data)
 	}
 
 	messageStatus, err := ParseMessageStatus(data)
