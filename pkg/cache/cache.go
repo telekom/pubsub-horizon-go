@@ -56,7 +56,7 @@ func (c *Cache[T]) Get(mapName string, key string) (*T, error) {
 	}
 
 	var unmarshalledValue = new(T)
-	if err := json.Unmarshal([]byte(hzJsonValue.String()), unmarshalledValue); err != nil {
+	if err := json.Unmarshal(hzJsonValue, unmarshalledValue); err != nil {
 		return nil, err
 	}
 
@@ -82,7 +82,7 @@ func (c *Cache[T]) GetQuery(mapName string, query predicate.Predicate) ([]T, err
 		}
 
 		var unmarshalledValue T
-		if err := json.Unmarshal([]byte(hzJsonValue.String()), &unmarshalledValue); err != nil {
+		if err := json.Unmarshal(hzJsonValue, &unmarshalledValue); err != nil {
 			return nil, err
 		}
 
