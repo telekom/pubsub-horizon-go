@@ -45,7 +45,7 @@ func TestResponseFilterMode_UnmarshalJSON(t *testing.T) {
 
 			var err = rfm.UnmarshalJSON([]byte(input.Value))
 			if input.ExpectError {
-				assertions.NotNil(err)
+				assertions.Error(err)
 			} else {
 				assertions.Equal(input.Expected, *rfm)
 			}
