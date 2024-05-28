@@ -17,7 +17,7 @@ variables:
   HAZELCAST_IMAGE: dockerhub.devops.telekom.de/hazelcast/hazelcast
   HAZELCAST_TAG: 5.3.6
 
-  DISABLE_BUILD_AND_PUBLISH: false
+  DISABLE_BUILD_AND_PUBLISH: 'true'
 
 stages:
   - prerequisite
