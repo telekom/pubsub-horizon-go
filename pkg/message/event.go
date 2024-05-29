@@ -11,6 +11,6 @@ type Event struct {
 	SpecVersion     string    `json:"specVersion" validate:"required"`
 	DataContentType string    `json:"dataContentType"`
 	DataRef         string    `json:"dataRef"`
-	Time            time.Time `json:"time" validate:"required,isoTime"`
+	Time            time.Time `json:"time" validate:"isoTime"`
 	Data            any       `json:"data"`
 }
