@@ -85,3 +85,26 @@ func TestEventRetentionTime_UnmarshalJSON(t *testing.T) {
 		})
 	}
 }
+
+func TestEventRetentionTime_MarshalJSON(t *testing.T) {
+	var inputs = []struct {
+		Value    TTL
+		Expected string
+	}{
+		{Ttl1Hour, `"subscribed_1h"`},
+		{Ttl1Day, `"subscribed_1d"`},
+		{Ttl3Days, `"subscribed_3d"`},
+		{Ttl5Days, `"subscribed_5d"`},
+		{Ttl7Days, `"subscribed"`},
+		{TtlDefault, `"subscribed"`},
+	}
+
+	for _, input := range inputs {
+		t.Run(input.Value.Topic, func(t *testing.T) {
+			var assertions = assert.New(t)
+			marshalled, err := input.Value.MarshalJSON()
+			assertions.NoError(err)
+			assertions.Equal(input.Expected, string(marshalled))
+		})
+	}
+}

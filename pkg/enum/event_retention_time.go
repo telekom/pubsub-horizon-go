@@ -78,3 +78,8 @@ func (ttl *TTL) UnmarshalJSON(bytes []byte) error {
 	*ttl = eventRetentionTime
 	return nil
 }
+
+func (ttl *TTL) MarshalJSON() ([]byte, error) {
+	var s = fmt.Sprintf(`"%s"`, ttl.Topic)
+	return []byte(s), nil
+}
