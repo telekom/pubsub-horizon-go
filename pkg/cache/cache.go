@@ -50,6 +50,10 @@ func (c *Cache[T]) Get(mapName string, key string) (*T, error) {
 		return nil, err
 	}
 
+	if value == nil {
+		return nil, nil
+	}
+
 	hzJsonValue, ok := value.(serialization.JSON)
 	if !ok {
 		return nil, fmt.Errorf("value of cached object with key '%s' is not a HazelcastJsonValue", key)
