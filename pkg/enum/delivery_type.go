@@ -48,6 +48,11 @@ func (t *DeliveryType) UnmarshalJSON(bytes []byte) error {
 	return nil
 }
 
+func (t *DeliveryType) MarshalJSON() ([]byte, error) {
+	var s = fmt.Sprintf(`"%s"`, t.String())
+	return []byte(s), nil
+}
+
 func (t *DeliveryType) String() string {
 	return string(*t)
 }

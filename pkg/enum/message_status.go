@@ -2,6 +2,7 @@ package enum
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -48,4 +49,13 @@ func (ms *MessageStatus) UnmarshalJSON(bytes []byte) error {
 
 	*ms = messageStatus
 	return nil
+}
+
+func (ms *MessageStatus) MarshalJSON() ([]byte, error) {
+	var s = fmt.Sprintf(`"%s"`, ms.String())
+	return []byte(s), nil
+}
+
+func (ms *MessageStatus) String() string {
+	return string(*ms)
 }

@@ -45,6 +45,11 @@ func (m *ResponseFilterMode) UnmarshalJSON(bytes []byte) error {
 	return nil
 }
 
+func (m *ResponseFilterMode) MarshalJSON() ([]byte, error) {
+	var s = fmt.Sprintf(`"%s"`, m.String())
+	return []byte(s), nil
+}
+
 func (m *ResponseFilterMode) String() string {
 	return string(*m)
 }

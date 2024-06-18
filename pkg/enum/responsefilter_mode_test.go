@@ -52,3 +52,22 @@ func TestResponseFilterMode_UnmarshalJSON(t *testing.T) {
 		})
 	}
 }
+
+func TestResponseFilterMode_MarshalJSON(t *testing.T) {
+	var inputs = []struct {
+		Value    ResponseFilterMode
+		Expected string
+	}{
+		{ResponseFilterModeInclude, `"INCLUDE"`},
+		{ResponseFilterModeExclude, `"EXCLUDE"`},
+	}
+
+	for _, input := range inputs {
+		t.Run(input.Value.String(), func(t *testing.T) {
+			var assertions = assert.New(t)
+			marshalled, err := input.Value.MarshalJSON()
+			assertions.NoError(err)
+			assertions.Equal(input.Expected, string(marshalled))
+		})
+	}
+}

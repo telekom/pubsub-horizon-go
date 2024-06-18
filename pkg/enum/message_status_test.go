@@ -61,3 +61,27 @@ func TestMessageStatus_UnmarshalJSON(t *testing.T) {
 		})
 	}
 }
+
+func TestMessageStatus_MarshalJSON(t *testing.T) {
+	var inputs = []struct {
+		Value    MessageStatus
+		Expected string
+	}{
+		{StatusProcessed, `"PROCESSED"`},
+		{StatusDelivering, `"DELIVERING"`},
+		{StatusDelivered, `"DELIVERED"`},
+		{StatusWaiting, `"WAITING"`},
+		{StatusDuplicate, `"DUPLICATE"`},
+		{StatusDropped, `"DROPPED"`},
+		{StatusFailed, `"FAILED"`},
+	}
+
+	for _, input := range inputs {
+		t.Run(input.Value.String(), func(t *testing.T) {
+			var assertions = assert.New(t)
+			marshalled, err := input.Value.MarshalJSON()
+			assertions.NoError(err)
+			assertions.Equal(input.Expected, string(marshalled))
+		})
+	}
+}

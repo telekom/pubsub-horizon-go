@@ -54,3 +54,22 @@ func TestDeliveryType_UnmarshalJSON(t *testing.T) {
 		})
 	}
 }
+
+func TestDeliveryType_MarshalJSON(t *testing.T) {
+	var inputs = []struct {
+		Value    DeliveryType
+		Expected string
+	}{
+		{DeliveryTypeCallback, `"callback"`},
+		{DeliveryTypeSse, `"server_sent_event"`},
+	}
+
+	for _, input := range inputs {
+		t.Run(input.Value.String(), func(t *testing.T) {
+			var assertions = assert.New(t)
+			marshalled, err := input.Value.MarshalJSON()
+			assertions.NoError(err)
+			assertions.Equal(input.Expected, string(marshalled))
+		})
+	}
+}
