@@ -46,3 +46,12 @@ func (cbStatus *CircuitBreakerStatus) UnmarshalJSON(bytes []byte) error {
 	*cbStatus = circuitBreakerStatus
 	return nil
 }
+
+func (cbStatus *CircuitBreakerStatus) MarshalJSON() ([]byte, error) {
+	var s = fmt.Sprintf(`"%s"`, cbStatus.String())
+	return []byte(s), nil
+}
+
+func (cbStatus *CircuitBreakerStatus) String() string {
+	return string(*cbStatus)
+}

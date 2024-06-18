@@ -56,3 +56,24 @@ func TestCircuitBreakerStatus_UnmarshalJSON(t *testing.T) {
 		})
 	}
 }
+
+func TestCircuitBreakerStatus_MarshalJSON(t *testing.T) {
+	var inputs = []struct {
+		Value    CircuitBreakerStatus
+		Expected string
+	}{
+		{CircuitBreakerStatusOpen, `"OPEN"`},
+		{CircuitBreakerStatusRepublishing, `"REPUBLISHING"`},
+		{CircuitBreakerStatusCooldown, `"COOLDOWN"`},
+		{CircuitBreakerStatusChecking, `"CHECKING"`},
+	}
+
+	for _, input := range inputs {
+		t.Run(input.Value.String(), func(t *testing.T) {
+			var assertions = assert.New(t)
+			marshalled, err := input.Value.MarshalJSON()
+			assertions.NoError(err)
+			assertions.Equal(input.Expected, string(marshalled))
+		})
+	}
+}
