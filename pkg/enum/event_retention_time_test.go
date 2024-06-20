@@ -73,14 +73,15 @@ func TestEventRetentionTime_UnmarshalJSON(t *testing.T) {
 
 	for _, input := range inputs {
 		t.Run(input.Value, func(t *testing.T) {
-			var assertions = assert.New(t)
-			var eventRetentionTime = new(TTL)
+			assertions := assert.New(t)
+			eventRetentionTime := new(TTL)
 
-			var err = eventRetentionTime.UnmarshalJSON([]byte(input.Value))
+			err := eventRetentionTime.UnmarshalJSON([]byte(`"` + input.Value + `"`))
 			if input.ExpectError {
-				assertions.Error(err)
+				assertions.Error(err, "Expected error for input: %s", input.Value)
 			} else {
-				assertions.Equal(input.Expected, *eventRetentionTime)
+				assertions.NoError(err, "Unexpected error for input: %s", input.Value)
+				assertions.Equal(input.Expected, *eventRetentionTime, "Unexpected TTL value for input: %s", input.Value)
 			}
 		})
 	}
