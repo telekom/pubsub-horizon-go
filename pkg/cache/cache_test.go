@@ -53,6 +53,20 @@ func TestCache_Get(t *testing.T) {
 	assertions.Equal("bar", dummy.Foo)
 }
 
+func TestCache_Delete(t *testing.T) {
+	var assertions = assert.New(t)
+
+	initialDummy := TestDummy{Foo: "bar"}
+	err := cache.Put("testMap", "dummy", initialDummy)
+	assertions.NoError(err)
+
+	err = cache.Delete("testMap", "dummy")
+	assertions.NoError(err)
+
+	deletedDummy, err := cache.Get("testMap", "dummy")
+	assertions.Nil(deletedDummy)
+}
+
 func TestCache_GetQuery(t *testing.T) {
 	var assertions = assert.New(t)
 	var query = predicate.Equal("foo", "bar")

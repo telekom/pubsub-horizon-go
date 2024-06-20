@@ -11,12 +11,12 @@ func TestParseEventRetentionTime(t *testing.T) {
 		Expected    TTL
 		ExpectError bool
 	}{
-		{"subscribed_1h", Ttl1Hour, false},
-		{"subscribed_1d", Ttl1Day, false},
-		{"subscribed_3d", Ttl3Days, false},
-		{"subscribed_5d", Ttl5Days, false},
-		{"subscribed", Ttl7Days, false},
-		{"subscribed", TtlDefault, false},
+		{"TTL_1_HOUR", Ttl1Hour, false},
+		{"TTL_1_DAY", Ttl1Day, false},
+		{"TTL_3_DAYS", Ttl3Days, false},
+		{"TTL_5_DAYS", Ttl5Days, false},
+		{"TTL_7_DAYS", Ttl7Days, false},
+		{"DEFAULT", TtlDefault, false},
 		{"8d", TTL{}, true},
 	}
 
@@ -62,12 +62,12 @@ func TestEventRetentionTime_UnmarshalJSON(t *testing.T) {
 		Expected    TTL
 		ExpectError bool
 	}{
-		{"subscribed_1h", Ttl1Hour, false},
-		{"subscribed_1d", Ttl1Day, false},
-		{"subscribed_3d", Ttl3Days, false},
-		{"subscribed_5d", Ttl5Days, false},
-		{"subscribed", Ttl7Days, false},
-		{"subscribed", TtlDefault, false},
+		{"TTL_1_HOUR", Ttl1Hour, false},
+		{"TTL_1_DAY", Ttl1Day, false},
+		{"TTL_3_DAYS", Ttl3Days, false},
+		{"TTL_5_DAYS", Ttl5Days, false},
+		{"TTL_7_DAYS", Ttl7Days, false},
+		{"DEFAULT", TtlDefault, false},
 		{"8d", TTL{}, true},
 	}
 
@@ -91,12 +91,12 @@ func TestEventRetentionTime_MarshalJSON(t *testing.T) {
 		Value    TTL
 		Expected string
 	}{
-		{Ttl1Hour, `"subscribed_1h"`},
-		{Ttl1Day, `"subscribed_1d"`},
-		{Ttl3Days, `"subscribed_3d"`},
-		{Ttl5Days, `"subscribed_5d"`},
-		{Ttl7Days, `"subscribed"`},
-		{TtlDefault, `"subscribed"`},
+		{Ttl1Hour, `"TTL_1_HOUR"`},
+		{Ttl1Day, `"TTL_1_DAY"`},
+		{Ttl3Days, `"TTL_3_DAYS"`},
+		{Ttl5Days, `"TTL_5_DAYS"`},
+		{Ttl7Days, `"TTL_7_DAYS"`},
+		{TtlDefault, `"DEFAULT"`},
 	}
 
 	for _, input := range inputs {

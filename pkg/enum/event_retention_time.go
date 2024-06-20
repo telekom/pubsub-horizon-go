@@ -12,34 +12,32 @@ type TTL struct {
 }
 
 var (
-	Ttl7Days   = TTL{"subscribed", 604800000}
-	Ttl5Days   = TTL{"subscribed_5d", 432000000}
-	Ttl3Days   = TTL{"subscribed_3d", 259200000}
-	Ttl1Day    = TTL{"subscribed_1d", 86400000}
-	Ttl1Hour   = TTL{"subscribed_1h", 3600000}
-	TtlDefault = Ttl7Days
+	Ttl7Days   = TTL{"TTL_7_DAYS", 604800000}
+	Ttl5Days   = TTL{"TTL_5_DAYS", 432000000}
+	Ttl3Days   = TTL{"TTL_3_DAYS", 259200000}
+	Ttl1Day    = TTL{"TTL_1_DAY", 86400000}
+	Ttl1Hour   = TTL{"TTL_1_HOUR", 3600000}
+	TtlDefault = TTL{"DEFAULT", 604800000}
 )
 
 func ParseEventRetentionTime(s string) (TTL, error) {
-	switch strings.ToLower(s) {
+	switch s {
 
-	case "subscribed":
+	case "TTL_7_DAYS":
 		return Ttl7Days, nil
-	case "subscribed_5d":
+	case "TTL_5_DAYS":
 		return Ttl5Days, nil
-	case "subscribed_3d":
+	case "TTL_3_DAYS":
 		return Ttl3Days, nil
-	case "subscribed_1d":
+	case "TTL_1_DAY":
 		return Ttl1Day, nil
-	case "subscribed_1h":
+	case "TTL_1_HOUR":
 		return Ttl1Hour, nil
-	case "default":
+	case "DEFAULT":
 		return TtlDefault, nil
 	default:
 		return TTL{}, fmt.Errorf("could not parse '%s' as eventRetentionTime", s)
-
 	}
-
 }
 
 func (ttl *TTL) RoverString() string {

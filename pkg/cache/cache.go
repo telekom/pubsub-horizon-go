@@ -67,6 +67,20 @@ func (c *Cache[T]) Get(mapName string, key string) (*T, error) {
 	return unmarshalledValue, nil
 }
 
+func (c *Cache[T]) Delete(mapName string, key string) error {
+	mp, err := c.client.GetMap(c.ctx, mapName)
+	if err != nil {
+		return err
+	}
+
+	err = mp.Delete(c.ctx, key)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (c *Cache[T]) GetQuery(mapName string, query predicate.Predicate) ([]T, error) {
 	mp, err := c.client.GetMap(c.ctx, mapName)
 	if err != nil {
