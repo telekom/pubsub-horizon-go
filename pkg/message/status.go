@@ -7,7 +7,7 @@ import (
 
 type StatusMessage struct {
 	Uuid                     string             `json:"uuid"`
-	Coordinates              Coordinates        `json:"coordinates"`
+	Coordinates              *Coordinates       `json:"coordinates"`
 	Status                   enum.MessageStatus `json:"status"`
 	Environment              string             `json:"environment"`
 	DeliveryType             enum.DeliveryType  `json:"deliveryType"`
@@ -26,8 +26,8 @@ type StatusMessage struct {
 }
 
 type Coordinates struct {
-	Partition int32 `json:"partition"`
-	Offset    int64 `json:"offset"`
+	Partition *int32 `json:"partition"`
+	Offset    *int64 `json:"offset"`
 }
 
 type EventDetails struct {
