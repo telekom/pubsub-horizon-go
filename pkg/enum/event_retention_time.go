@@ -1,9 +1,8 @@
 package enum
 
 import (
+	"encoding/json"
 	"fmt"
-	"strconv"
-	"strings"
 )
 
 type TTL struct {
@@ -58,14 +57,9 @@ func (ttl *TTL) RoverString() string {
 }
 
 func (ttl *TTL) UnmarshalJSON(bytes []byte) error {
-	var data = string(bytes)
-
-	if data == "null" {
-		return nil
-	}
-
-	if strings.HasPrefix(data, `"`) && strings.HasSuffix(data, `"`) {
-		data, _ = strconv.Unquote(data)
+	var data string
+	if err := json.Unmarshal(bytes, &data); err != nil {
+		return err
 	}
 
 	eventRetentionTime, err := ParseEventRetentionTime(data)
@@ -76,7 +70,6 @@ func (ttl *TTL) UnmarshalJSON(bytes []byte) error {
 	*ttl = eventRetentionTime
 	return nil
 }
-
 func (ttl *TTL) MarshalJSON() ([]byte, error) {
 	var s = fmt.Sprintf(`"%s"`, ttl.Topic)
 	return []byte(s), nil
