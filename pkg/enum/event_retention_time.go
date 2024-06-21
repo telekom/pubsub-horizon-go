@@ -3,43 +3,67 @@ package enum
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
+	"strings"
 )
 
-type TTL struct {
-	Topic             string
-	RetentionTimeInMs int
+type EventRetentionTime string
+
+const (
+	Ttl7Days   EventRetentionTime = "TTL_7_DAYS"
+	Ttl5Days   EventRetentionTime = "TTL_5_DAYS"
+	Ttl3Days   EventRetentionTime = "TTL_3_DAYS"
+	Ttl1Day    EventRetentionTime = "TTL_1_DAY"
+	Ttl1Hour   EventRetentionTime = "TTL_1_HOUR"
+	TtlDefault EventRetentionTime = "DEFAULT"
+)
+
+var EventRetentionTimes = map[EventRetentionTime]struct {
+	Topic         string
+	RetentionInMs int64
+}{
+	Ttl7Days:   {"subscribed", 604800000},
+	Ttl5Days:   {"subscribed_5d", 432000000},
+	Ttl3Days:   {"subscribed_3d", 259200000},
+	Ttl1Day:    {"subscribed_1d", 86400000},
+	Ttl1Hour:   {"subscribed_1h", 3600000},
+	TtlDefault: {"subscribed", 604800000},
 }
 
-var (
-	Ttl7Days   = TTL{"TTL_7_DAYS", 604800000}
-	Ttl5Days   = TTL{"TTL_5_DAYS", 432000000}
-	Ttl3Days   = TTL{"TTL_3_DAYS", 259200000}
-	Ttl1Day    = TTL{"TTL_1_DAY", 86400000}
-	Ttl1Hour   = TTL{"TTL_1_HOUR", 3600000}
-	TtlDefault = TTL{"DEFAULT", 604800000}
-)
-
-func ParseEventRetentionTime(s string) (TTL, error) {
-	switch s {
-
-	case "TTL_7_DAYS":
-		return Ttl7Days, nil
-	case "TTL_5_DAYS":
-		return Ttl5Days, nil
-	case "TTL_3_DAYS":
-		return Ttl3Days, nil
-	case "TTL_1_DAY":
-		return Ttl1Day, nil
-	case "TTL_1_HOUR":
-		return Ttl1Hour, nil
-	case "DEFAULT":
-		return TtlDefault, nil
-	default:
-		return TTL{}, fmt.Errorf("could not parse '%s' as eventRetentionTime", s)
+func ParseEventRetentionTime(s string) (EventRetentionTime, error) {
+	for key, _ := range EventRetentionTimes {
+		if string(key) == s {
+			return key, nil
+		}
 	}
+	return TtlDefault, fmt.Errorf("could not parse '%s' as EventRetentionTime", s)
 }
 
-func (ttl *TTL) RoverString() string {
+func (ttl *EventRetentionTime) UnmarshalJSON(bytes []byte) error {
+	var data = string(bytes)
+
+	if data == "null" {
+		return nil
+	}
+
+	if strings.HasPrefix(data, `"`) && strings.HasSuffix(data, `"`) {
+		data, _ = strconv.Unquote(data)
+	}
+
+	eventRetentionTime, err := ParseEventRetentionTime(data)
+	if err != nil {
+		return err
+	}
+
+	*ttl = eventRetentionTime
+	return nil
+}
+
+func (ttl *EventRetentionTime) MarshalJSON() ([]byte, error) {
+	return json.Marshal(*ttl)
+}
+
+func (ttl *EventRetentionTime) ToRoverConfigString() string {
 	switch *ttl {
 	case Ttl7Days:
 		return "7d"
@@ -51,26 +75,9 @@ func (ttl *TTL) RoverString() string {
 		return "1d"
 	case Ttl1Hour:
 		return "1h"
+	case TtlDefault:
+		return "7d"
 	default:
 		return "7d"
 	}
-}
-
-func (ttl *TTL) UnmarshalJSON(bytes []byte) error {
-	var data string
-	if err := json.Unmarshal(bytes, &data); err != nil {
-		return err
-	}
-
-	eventRetentionTime, err := ParseEventRetentionTime(data)
-	if err != nil {
-		return err
-	}
-
-	*ttl = eventRetentionTime
-	return nil
-}
-func (ttl *TTL) MarshalJSON() ([]byte, error) {
-	var s = fmt.Sprintf(`"%s"`, ttl.Topic)
-	return []byte(s), nil
 }

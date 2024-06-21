@@ -8,7 +8,7 @@ import (
 func TestParseEventRetentionTime(t *testing.T) {
 	var inputs = []struct {
 		Value       string
-		Expected    TTL
+		Expected    EventRetentionTime
 		ExpectError bool
 	}{
 		{"TTL_1_HOUR", Ttl1Hour, false},
@@ -17,7 +17,7 @@ func TestParseEventRetentionTime(t *testing.T) {
 		{"TTL_5_DAYS", Ttl5Days, false},
 		{"TTL_7_DAYS", Ttl7Days, false},
 		{"DEFAULT", TtlDefault, false},
-		{"8d", TTL{}, true},
+		{"TTL_8_DAYS", TtlDefault, true},
 	}
 
 	for _, input := range inputs {
@@ -33,7 +33,7 @@ func TestParseEventRetentionTime(t *testing.T) {
 
 func TestRoverString(t *testing.T) {
 	var inputs = []struct {
-		Value       TTL
+		Value       EventRetentionTime
 		Expected    string
 		ExpectError bool
 	}{
@@ -43,14 +43,13 @@ func TestRoverString(t *testing.T) {
 		{Ttl5Days, "5d", false},
 		{Ttl7Days, "7d", false},
 		{TtlDefault, "7d", false},
-		{TTL{}, "7d", false},
 	}
 
 	for _, input := range inputs {
-		t.Run(input.Value.Topic, func(t *testing.T) {
+		t.Run(input.Value.ToRoverConfigString(), func(t *testing.T) {
 			var assertions = assert.New(t)
 
-			eventRetentionTime := input.Value.RoverString()
+			eventRetentionTime := input.Value.ToRoverConfigString()
 			assertions.Equal(input.Expected, eventRetentionTime)
 		})
 	}
@@ -59,7 +58,7 @@ func TestRoverString(t *testing.T) {
 func TestEventRetentionTime_UnmarshalJSON(t *testing.T) {
 	var inputs = []struct {
 		Value       string
-		Expected    TTL
+		Expected    EventRetentionTime
 		ExpectError bool
 	}{
 		{"TTL_1_HOUR", Ttl1Hour, false},
@@ -68,13 +67,13 @@ func TestEventRetentionTime_UnmarshalJSON(t *testing.T) {
 		{"TTL_5_DAYS", Ttl5Days, false},
 		{"TTL_7_DAYS", Ttl7Days, false},
 		{"DEFAULT", TtlDefault, false},
-		{"8d", TTL{}, true},
+		{"8d", TtlDefault, true},
 	}
 
 	for _, input := range inputs {
 		t.Run(input.Value, func(t *testing.T) {
 			assertions := assert.New(t)
-			eventRetentionTime := new(TTL)
+			eventRetentionTime := new(EventRetentionTime)
 
 			err := eventRetentionTime.UnmarshalJSON([]byte(`"` + input.Value + `"`))
 			if input.ExpectError {
@@ -89,7 +88,7 @@ func TestEventRetentionTime_UnmarshalJSON(t *testing.T) {
 
 func TestEventRetentionTime_MarshalJSON(t *testing.T) {
 	var inputs = []struct {
-		Value    TTL
+		Value    EventRetentionTime
 		Expected string
 	}{
 		{Ttl1Hour, `"TTL_1_HOUR"`},
@@ -101,7 +100,7 @@ func TestEventRetentionTime_MarshalJSON(t *testing.T) {
 	}
 
 	for _, input := range inputs {
-		t.Run(input.Value.Topic, func(t *testing.T) {
+		t.Run(input.Value.ToRoverConfigString(), func(t *testing.T) {
 			var assertions = assert.New(t)
 			marshalled, err := input.Value.MarshalJSON()
 			assertions.NoError(err)
