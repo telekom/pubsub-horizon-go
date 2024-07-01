@@ -5,7 +5,7 @@ SPDX-License-Identifier: Apache-2.0
 -->
 
 # Horizon Go
-Horizon Go is a library of shared code between newly written Go components within the Horizon ecosystem.
+Horizon Go is a library of code shared between newly written Go components within the Horizon ecosystem.
 
 > **⚠️ Under construction ⚠️**
 >
