@@ -5,11 +5,11 @@
 package cache
 
 import (
-	"eni.telekom.de/horizon2go/pkg/test"
 	"github.com/hazelcast/hazelcast-go-client"
 	"github.com/hazelcast/hazelcast-go-client/cluster"
 	"github.com/hazelcast/hazelcast-go-client/predicate"
 	"github.com/stretchr/testify/assert"
+	"github.com/telekom/pubsub-horizon-go/test"
 	"os"
 	"testing"
 )

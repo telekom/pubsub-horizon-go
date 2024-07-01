@@ -5,7 +5,7 @@
 package message
 
 import (
-	"eni.telekom.de/horizon2go/pkg/enum"
+	"github.com/telekom/pubsub-horizon-go/enum"
 	"time"
 )
 

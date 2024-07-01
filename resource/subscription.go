@@ -4,7 +4,7 @@
 
 package resource
 
-import "eni.telekom.de/horizon2go/pkg/enum"
+import "github.com/telekom/pubsub-horizon-go/enum"
 
 type SubscriptionResource struct {
 	Spec struct {

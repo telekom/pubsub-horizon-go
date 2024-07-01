@@ -4,7 +4,7 @@
 
 package message
 
-import "eni.telekom.de/horizon2go/pkg/enum"
+import "github.com/telekom/pubsub-horizon-go/enum"
 
 type PublishedMessage struct {
 	Uuid             string              `json:"uuid"`
