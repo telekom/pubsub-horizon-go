@@ -1,4 +1,4 @@
-module github.com/telekom/horizon-go
+module github.com/telekom/pubsub-horizon-go
 
 go 1.22
 
