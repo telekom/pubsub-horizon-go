@@ -1,4 +1,4 @@
-module eni.telekom.de/horizon2go
+module github.com/telekom/horizon-go
 
 go 1.22
 
