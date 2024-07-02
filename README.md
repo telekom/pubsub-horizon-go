@@ -7,6 +7,11 @@ SPDX-License-Identifier: Apache-2.0
 # Horizon Go
 Horizon Go is a library of code shared between newly written Go components within the Horizon ecosystem.
 
+[![REUSE status](https://api.reuse.software/badge/github.com/telekom/pubsub-horizon-go)](https://api.reuse.software/info/github.com/telekom/pubsub-horizon-go)
+[![Go Reference](https://pkg.go.dev/badge/github.com/telekom/pubsub-horizon-go.svg)](https://pkg.go.dev/github.com/telekom/pubsub-horizon-go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/telekom/pubsub-horizon-go)](https://goreportcard.com/report/github.com/telekom/pubsub-horizon-go)
+[![Go Test](https://github.com/telekom/pubsub-horizon-go/actions/workflows/go-test.yml/badge.svg)](https://github.com/telekom/pubsub-horizon-go/actions/workflows/go-test.yml)
+
 > **⚠️ Under construction ⚠️**
 >
 > This library is currently under construction and not yet ready for use.
