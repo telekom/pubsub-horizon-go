@@ -5,13 +5,17 @@
 package cache
 
 import (
+	"encoding/json"
 	"github.com/hazelcast/hazelcast-go-client"
 	"github.com/hazelcast/hazelcast-go-client/cluster"
 	"github.com/hazelcast/hazelcast-go-client/predicate"
+	"github.com/hazelcast/hazelcast-go-client/serialization"
 	"github.com/stretchr/testify/assert"
+	"github.com/telekom/pubsub-horizon-go/resource"
 	"github.com/telekom/pubsub-horizon-go/test"
 	"os"
 	"testing"
+	"time"
 )
 
 var cache *Cache[TestDummy]
@@ -87,4 +91,64 @@ func TestCache_Delete(t *testing.T) {
 
 	deletedDummy, err := cache.Get("testMap", "dummy")
 	assertions.Nil(deletedDummy)
+}
+
+func TestCache_AddListener(t *testing.T) {
+	var assertions = assert.New(t)
+
+	var listener = &MockListener[resource.SubscriptionResource]{}
+	err := cache.AddListener("testMap", listener)
+	assertions.NoError(err)
+
+	mp, err := cache.client.GetMap(cache.ctx, "testMap")
+	assertions.NoError(err)
+
+	// Add
+	testData := &resource.SubscriptionResource{
+		Spec: struct {
+			Subscription resource.Subscription `json:"subscription"`
+			Environment  string                `json:"environment"`
+		}{
+			Subscription: resource.Subscription{
+				PublisherId:  "pub-123",
+				SubscriberId: "sub-456",
+			},
+		},
+	}
+
+	jsonBytes, err := json.Marshal(testData)
+	var jsonData serialization.JSON
+	jsonData = jsonBytes
+
+	err = mp.Set(cache.ctx, "key1", jsonData)
+	time.Sleep(2 * time.Second)
+	assertions.True(listener.onAddCalled)
+
+	// Update
+	testDataUpdate := &resource.SubscriptionResource{
+		Spec: struct {
+			Subscription resource.Subscription `json:"subscription"`
+			Environment  string                `json:"environment"`
+		}{
+			Subscription: resource.Subscription{
+				PublisherId:  "pub-123",
+				SubscriberId: "sub-456-updated",
+			},
+		},
+	}
+
+	jsonBytesUpdate, err := json.Marshal(testDataUpdate)
+	assertions.NoError(err)
+	var jsonDataUpdate serialization.JSON
+	jsonDataUpdate = jsonBytesUpdate
+
+	err = mp.Set(cache.ctx, "key1", jsonDataUpdate)
+	time.Sleep(2 * time.Second)
+	assertions.True(listener.onUpdateCalled)
+
+	// Remove
+	err = mp.Delete(cache.ctx, "key1")
+	assertions.NoError(err)
+	time.Sleep(2 * time.Second)
+	assertions.True(listener.onDeleteCalled)
 }

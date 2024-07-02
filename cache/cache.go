@@ -126,3 +126,58 @@ func (c *Cache[T]) GetClient() *hazelcast.Client {
 func (c *Cache[T]) GetMap(mapName string) (*hazelcast.Map, error) {
 	return c.client.GetMap(c.ctx, mapName)
 }
+
+func (c *Cache[T]) AddListener(mapName string, listener Listener[T]) error {
+	mp, err := c.client.GetMap(c.ctx, mapName)
+	if err != nil {
+		return err
+	}
+
+	// Add a listener to the map to react to events.
+	_, err = mp.AddListener(c.ctx, hazelcast.MapListener{
+		EntryAdded: func(event *hazelcast.EntryNotified) {
+			c.handleEvent(event, listener.OnAdd)
+			log.Info().Msg("Entry added")
+		},
+		EntryUpdated: func(event *hazelcast.EntryNotified) {
+			c.handleEvent(event, listener.OnUpdate)
+			log.Info().Msg("Entry updated")
+		},
+		EntryRemoved: func(event *hazelcast.EntryNotified) {
+			c.handleEvent(event, listener.OnDelete)
+			log.Info().Msg("Entry removed")
+		},
+	}, true)
+
+	if err != nil {
+		return fmt.Errorf("failed to add listener: %w", err)
+	}
+
+	return nil
+}
+
+func (c *Cache[T]) handleEvent(event *hazelcast.EntryNotified, handler func(*hazelcast.EntryNotified, T)) {
+	var obj T
+
+	// If the event type is EntryRemoved, we couldn't unmarshal the JSON data because the data are nil.
+	if event.EventType == hazelcast.EntryRemoved {
+		handler(event, obj)
+		return
+	}
+
+	// Assert that event.Value is of type serialization.JSON.
+	jsonData, ok := event.Value.(serialization.JSON)
+	if !ok {
+		log.Printf("Failed to assert event value as JSON: %v", event.Value)
+		return
+	}
+
+	// Unmarshal the JSON data into the generic object of type T.
+	err := json.Unmarshal(jsonData, &obj)
+	if err != nil {
+		log.Printf("Failed to unmarshal JSON: %v", err)
+		return
+	}
+
+	handler(event, obj)
+}
