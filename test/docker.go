@@ -61,7 +61,7 @@ func StopDocker() {
 func setupHazelcast() {
 	var err error
 	hazelcastContainer, err = pool.RunWithOptions(&dockertest.RunOptions{
-		Name:         "horizon2go-hazelcast",
+		Name:         "horizon-go-hazelcast",
 		Repository:   hazelcastImage,
 		Tag:          hazelcastTag,
 		ExposedPorts: []string{"5701/tcp"},
