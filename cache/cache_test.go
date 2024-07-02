@@ -5,13 +5,10 @@
 package cache
 
 import (
-	"encoding/json"
 	"github.com/hazelcast/hazelcast-go-client"
 	"github.com/hazelcast/hazelcast-go-client/cluster"
 	"github.com/hazelcast/hazelcast-go-client/predicate"
-	"github.com/hazelcast/hazelcast-go-client/serialization"
 	"github.com/stretchr/testify/assert"
-	"github.com/telekom/pubsub-horizon-go/resource"
 	"github.com/telekom/pubsub-horizon-go/test"
 	"os"
 	"testing"
@@ -96,56 +93,45 @@ func TestCache_Delete(t *testing.T) {
 func TestCache_AddListener(t *testing.T) {
 	var assertions = assert.New(t)
 
-	var listener = &MockListener[resource.SubscriptionResource]{}
-	err := cache.AddListener("testMap", listener)
+	var listener = &MockListener[TestDummy]{}
+	var listenerDummy = TestDummy{Foo: "bar"}
+
+	var err = cache.AddListener("testMap", listener)
 	assertions.NoError(err)
 
-	mp, err := cache.client.GetMap(cache.ctx, "testMap")
-	assertions.NoError(err)
+	t.Run("Add", func(t *testing.T) {
+		var assertions = assert.New(t)
+		var err = cache.Put("testMap", "listenerDummy", listenerDummy)
+		assertions.NoError(err)
+		assertions.Eventually(func() bool {
+			return listener.onAddCalled
+		}, 5*time.Second, 10*time.Millisecond)
+	})
 
-	testData := &resource.SubscriptionResource{
-		Spec: struct {
-			Subscription resource.Subscription `json:"subscription"`
-			Environment  string                `json:"environment"`
-		}{
-			Subscription: resource.Subscription{
-				PublisherId:  "pub-123",
-				SubscriberId: "sub-456",
-			},
-		},
-	}
+	t.Run("Update", func(t *testing.T) {
+		var assertions = assert.New(t)
+		listenerDummy.Foo = "fizz"
 
-	jsonBytes, err := json.Marshal(testData)
-	var jsonData serialization.JSON
-	jsonData = jsonBytes
+		var err = cache.Put("testMap", "listenerDummy", listenerDummy)
+		assertions.NoError(err)
 
-	err = mp.Set(cache.ctx, "key1", jsonData)
-	time.Sleep(2 * time.Second)
-	assertions.True(listener.onAddCalled)
+		assertions.Eventually(func() bool {
+			return listener.onUpdateCalled
+		}, 5*time.Second, 10*time.Millisecond)
+	})
 
-	testDataUpdate := &resource.SubscriptionResource{
-		Spec: struct {
-			Subscription resource.Subscription `json:"subscription"`
-			Environment  string                `json:"environment"`
-		}{
-			Subscription: resource.Subscription{
-				PublisherId:  "pub-123",
-				SubscriberId: "sub-456-updated",
-			},
-		},
-	}
+	t.Run("Delete", func(t *testing.T) {
+		var assertions = assert.New(t)
 
-	jsonBytesUpdate, err := json.Marshal(testDataUpdate)
-	assertions.NoError(err)
-	var jsonDataUpdate serialization.JSON
-	jsonDataUpdate = jsonBytesUpdate
+		var err = cache.Delete("testMap", "listenerDummy")
+		assertions.NoError(err)
+		assertions.Eventually(func() bool {
+			return listener.onDeleteCalled
+		}, 5*time.Second, 10*time.Millisecond)
+	})
 
-	err = mp.Set(cache.ctx, "key1", jsonDataUpdate)
-	time.Sleep(2 * time.Second)
-	assertions.True(listener.onUpdateCalled)
-
-	err = mp.Delete(cache.ctx, "key1")
-	assertions.NoError(err)
-	time.Sleep(2 * time.Second)
-	assertions.True(listener.onDeleteCalled)
+	t.Run("Errors", func(t *testing.T) {
+		assertions.False(listener.onErrorCalled)
+		assertions.NoError(listener.err)
+	})
 }

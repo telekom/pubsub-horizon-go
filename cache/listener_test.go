@@ -2,14 +2,14 @@ package cache
 
 import (
 	"github.com/hazelcast/hazelcast-go-client"
-	"github.com/telekom/pubsub-horizon-go/resource"
-	"log"
 )
 
-type MockListener[T resource.SubscriptionResource] struct {
+type MockListener[T TestDummy] struct {
 	onAddCalled    bool
 	onUpdateCalled bool
 	onDeleteCalled bool
+	onErrorCalled  bool
+	err            error
 }
 
 func (m *MockListener[T]) OnAdd(event *hazelcast.EntryNotified, obj TestDummy) {
@@ -25,6 +25,6 @@ func (m *MockListener[T]) OnDelete(event *hazelcast.EntryNotified) {
 }
 
 func (m *MockListener[T]) OnError(event *hazelcast.EntryNotified, err error) {
-	log.Printf("%v\n", err)
-	panic(err)
+	m.onErrorCalled = true
+	m.err = err
 }
