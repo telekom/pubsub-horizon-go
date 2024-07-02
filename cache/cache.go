@@ -29,6 +29,11 @@ func NewCache[T any](config hazelcast.Config) (*Cache[T], error) {
 	return &Cache[T]{ctx: ctx, client: client}, nil
 }
 
+func NewCacheWithClient[T any](client *hazelcast.Client) *Cache[T] {
+	var ctx = context.Background()
+	return &Cache[T]{ctx, client}
+}
+
 func (c *Cache[T]) Put(mapName string, key string, value T) error {
 	mp, err := c.client.GetMap(c.ctx, mapName)
 	if err != nil {
@@ -112,4 +117,12 @@ func (c *Cache[T]) GetQuery(mapName string, query predicate.Predicate) ([]T, err
 	}
 
 	return unmarshalledValues, nil
+}
+
+func (c *Cache[T]) GetClient() *hazelcast.Client {
+	return c.client
+}
+
+func (c *Cache[T]) GetMap(mapName string) (*hazelcast.Map, error) {
+	return c.client.GetMap(c.ctx, mapName)
 }
