@@ -103,7 +103,6 @@ func TestCache_AddListener(t *testing.T) {
 	mp, err := cache.client.GetMap(cache.ctx, "testMap")
 	assertions.NoError(err)
 
-	// Add
 	testData := &resource.SubscriptionResource{
 		Spec: struct {
 			Subscription resource.Subscription `json:"subscription"`
@@ -124,7 +123,6 @@ func TestCache_AddListener(t *testing.T) {
 	time.Sleep(2 * time.Second)
 	assertions.True(listener.onAddCalled)
 
-	// Update
 	testDataUpdate := &resource.SubscriptionResource{
 		Spec: struct {
 			Subscription resource.Subscription `json:"subscription"`
@@ -146,7 +144,6 @@ func TestCache_AddListener(t *testing.T) {
 	time.Sleep(2 * time.Second)
 	assertions.True(listener.onUpdateCalled)
 
-	// Remove
 	err = mp.Delete(cache.ctx, "key1")
 	assertions.NoError(err)
 	time.Sleep(2 * time.Second)

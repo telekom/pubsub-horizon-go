@@ -63,13 +63,8 @@ func (c *Cache[T]) Get(mapName string, key string) (*T, error) {
 		return nil, nil
 	}
 
-	hzJsonValue, ok := value.(serialization.JSON)
-	if !ok {
-		return nil, fmt.Errorf("value of cached object with key '%s' is not a HazelcastJsonValue", key)
-	}
-
 	var unmarshalledValue = new(T)
-	if err := json.Unmarshal(hzJsonValue, unmarshalledValue); err != nil {
+	if err := c.unmarshalHazelcastJson(key, value, unmarshalledValue); err != nil {
 		return nil, err
 	}
 
@@ -136,16 +131,31 @@ func (c *Cache[T]) AddListener(mapName string, listener Listener[T]) error {
 	// Add a listener to the map to react to events.
 	_, err = mp.AddListener(c.ctx, hazelcast.MapListener{
 		EntryAdded: func(event *hazelcast.EntryNotified) {
-			c.handleEvent(event, listener.OnAdd)
-			log.Info().Msg("Entry added")
+			var obj T
+			if err := c.unmarshalHazelcastJson(event.Key, event.Value, &obj); err != nil {
+				listener.OnError(event, err)
+				return
+			}
+
+			listener.OnAdd(event, obj)
 		},
 		EntryUpdated: func(event *hazelcast.EntryNotified) {
-			c.handleEvent(event, listener.OnUpdate)
-			log.Info().Msg("Entry updated")
+			var obj T
+			if err := c.unmarshalHazelcastJson(event.Key, event.Value, &obj); err != nil {
+				listener.OnError(event, err)
+				return
+			}
+
+			var oldObj T
+			if err := c.unmarshalHazelcastJson(event.Key, event.Value, &oldObj); err != nil {
+				listener.OnError(event, err)
+				return
+			}
+
+			listener.OnUpdate(event, obj, oldObj)
 		},
 		EntryRemoved: func(event *hazelcast.EntryNotified) {
-			c.handleEvent(event, listener.OnDelete)
-			log.Info().Msg("Entry removed")
+			listener.OnDelete(event)
 		},
 	}, true)
 
@@ -156,28 +166,10 @@ func (c *Cache[T]) AddListener(mapName string, listener Listener[T]) error {
 	return nil
 }
 
-func (c *Cache[T]) handleEvent(event *hazelcast.EntryNotified, handler func(*hazelcast.EntryNotified, T)) {
-	var obj T
-
-	// If the event type is EntryRemoved, we couldn't unmarshal the JSON data because the data are nil.
-	if event.EventType == hazelcast.EntryRemoved {
-		handler(event, obj)
-		return
-	}
-
-	// Assert that event.Value is of type serialization.JSON.
-	jsonData, ok := event.Value.(serialization.JSON)
+func (c *Cache[T]) unmarshalHazelcastJson(key any, value any, obj any) error {
+	hzJsonValue, ok := value.(serialization.JSON)
 	if !ok {
-		log.Printf("Failed to assert event value as JSON: %v", event.Value)
-		return
+		return fmt.Errorf("value of cached object with key '%s' is not a HazelcastJsonValue", key)
 	}
-
-	// Unmarshal the JSON data into the generic object of type T.
-	err := json.Unmarshal(jsonData, &obj)
-	if err != nil {
-		log.Printf("Failed to unmarshal JSON: %v", err)
-		return
-	}
-
-	handler(event, obj)
+	return json.Unmarshal(hzJsonValue, obj)
 }
