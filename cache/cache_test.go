@@ -41,6 +41,12 @@ func TestNewCache(t *testing.T) {
 	assertions.Nil(err)
 }
 
+func TestNewCacheWithClient(t *testing.T) {
+	var assertions = assert.New(t)
+	var cacheWithSameClient = NewCacheWithClient[TestDummy](cache.client)
+	assertions.Equal(cache.client, cacheWithSameClient.client)
+}
+
 func TestCache_Put(t *testing.T) {
 	var assertions = assert.New(t)
 	var dummy = TestDummy{
