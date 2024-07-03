@@ -26,7 +26,7 @@ type HazelcastBasedCache[T any] interface {
 	AddListener(mapName string, listener Listener[T]) error
 }
 
-func NewCache[T any](config hazelcast.Config) (*HazelcastCache[T], error) {
+func NewHazelcastCache[T any](config hazelcast.Config) (*HazelcastCache[T], error) {
 	var ctx = context.Background()
 
 	client, err := hazelcast.StartNewClientWithConfig(ctx, config)
@@ -37,7 +37,7 @@ func NewCache[T any](config hazelcast.Config) (*HazelcastCache[T], error) {
 	return &HazelcastCache[T]{ctx: ctx, client: client}, nil
 }
 
-func NewCacheWithClient[T any](client *hazelcast.Client) *HazelcastCache[T] {
+func NewHazelcastCacheWithClient[T any](client *hazelcast.Client) *HazelcastCache[T] {
 	var ctx = context.Background()
 	return &HazelcastCache[T]{ctx, client}
 }
