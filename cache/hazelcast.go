@@ -18,6 +18,14 @@ type HazelcastCache[T any] struct {
 	client *hazelcast.Client
 }
 
+type HazelcastBasedCache[T any] interface {
+	Cache[T]
+	GetQuery(mapName string, query predicate.Predicate) ([]T, error)
+	GetClient() *hazelcast.Client
+	GetMap(mapKey string) (*hazelcast.Map, error)
+	AddListener(mapName string, listener Listener[T]) error
+}
+
 func NewCache[T any](config hazelcast.Config) (*HazelcastCache[T], error) {
 	var ctx = context.Background()
 
