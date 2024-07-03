@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-var cache *Cache[TestDummy]
+var cache *HazelcastCache[TestDummy]
 
 type TestDummy struct {
 	Foo string `json:"foo"`
