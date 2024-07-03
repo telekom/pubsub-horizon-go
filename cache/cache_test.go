@@ -12,6 +12,7 @@ import (
 	"github.com/telekom/pubsub-horizon-go/test"
 	"os"
 	"testing"
+	"time"
 )
 
 var cache *Cache[TestDummy]
@@ -87,4 +88,50 @@ func TestCache_Delete(t *testing.T) {
 
 	deletedDummy, err := cache.Get("testMap", "dummy")
 	assertions.Nil(deletedDummy)
+}
+
+func TestCache_AddListener(t *testing.T) {
+	var assertions = assert.New(t)
+
+	var listener = &MockListener[TestDummy]{}
+	var listenerDummy = TestDummy{Foo: "bar"}
+
+	var err = cache.AddListener("testMap", listener)
+	assertions.NoError(err)
+
+	t.Run("Add", func(t *testing.T) {
+		var assertions = assert.New(t)
+		var err = cache.Put("testMap", "listenerDummy", listenerDummy)
+		assertions.NoError(err)
+		assertions.Eventually(func() bool {
+			return listener.onAddCalled
+		}, 5*time.Second, 10*time.Millisecond)
+	})
+
+	t.Run("Update", func(t *testing.T) {
+		var assertions = assert.New(t)
+		listenerDummy.Foo = "fizz"
+
+		var err = cache.Put("testMap", "listenerDummy", listenerDummy)
+		assertions.NoError(err)
+
+		assertions.Eventually(func() bool {
+			return listener.onUpdateCalled
+		}, 5*time.Second, 10*time.Millisecond)
+	})
+
+	t.Run("Delete", func(t *testing.T) {
+		var assertions = assert.New(t)
+
+		var err = cache.Delete("testMap", "listenerDummy")
+		assertions.NoError(err)
+		assertions.Eventually(func() bool {
+			return listener.onDeleteCalled
+		}, 5*time.Second, 10*time.Millisecond)
+	})
+
+	t.Run("Errors", func(t *testing.T) {
+		assertions.False(listener.onErrorCalled)
+		assertions.NoError(listener.err)
+	})
 }
