@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-var cache *Cache[TestDummy]
+var cache *HazelcastCache[TestDummy]
 
 type TestDummy struct {
 	Foo string `json:"foo"`
@@ -38,13 +38,13 @@ func TestNewCache(t *testing.T) {
 	config.Failover.TryCount = 5
 
 	var err error
-	cache, err = NewCache[TestDummy](config)
+	cache, err = NewHazelcastCache[TestDummy](config)
 	assertions.Nil(err)
 }
 
 func TestNewCacheWithClient(t *testing.T) {
 	var assertions = assert.New(t)
-	var cacheWithSameClient = NewCacheWithClient[TestDummy](cache.client)
+	var cacheWithSameClient = NewHazelcastCacheWithClient[TestDummy](cache.client)
 	assertions.Equal(cache.client, cacheWithSameClient.client)
 }
 
