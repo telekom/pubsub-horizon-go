@@ -13,8 +13,8 @@ import (
 type DeliveryType string
 
 const (
-	DeliveryTypeSse      = "server_sent_event"
-	DeliveryTypeCallback = "callback"
+	DeliveryTypeSse      DeliveryType = "server_sent_event"
+	DeliveryTypeCallback DeliveryType = "callback"
 )
 
 func ParseDeliveryType(s string) (DeliveryType, error) {
