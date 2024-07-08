@@ -16,9 +16,7 @@ func TestParseCircuitBreakerStatus(t *testing.T) {
 		ExpectError bool
 	}{
 		{"OPEN", CircuitBreakerStatusOpen, false},
-		{"REPUBLISHING", CircuitBreakerStatusRepublishing, false},
-		{"COOLDOWN", CircuitBreakerStatusCooldown, false},
-		{"CHECKING", CircuitBreakerStatusChecking, false},
+		{"CLOSED", CircuitBreakerStatusClosed, false},
 		{"INVALID", "", true},
 	}
 
@@ -40,9 +38,7 @@ func TestCircuitBreakerStatus_UnmarshalJSON(t *testing.T) {
 		ExpectError bool
 	}{
 		{"OPEN", CircuitBreakerStatusOpen, false},
-		{"REPUBLISHING", CircuitBreakerStatusRepublishing, false},
-		{"COOLDOWN", CircuitBreakerStatusCooldown, false},
-		{"CHECKING", CircuitBreakerStatusChecking, false},
+		{"CLOSED", CircuitBreakerStatusClosed, false},
 		{"INVALID", "", true},
 	}
 
@@ -67,9 +63,7 @@ func TestCircuitBreakerStatus_MarshalJSON(t *testing.T) {
 		Expected string
 	}{
 		{CircuitBreakerStatusOpen, `"OPEN"`},
-		{CircuitBreakerStatusRepublishing, `"REPUBLISHING"`},
-		{CircuitBreakerStatusCooldown, `"COOLDOWN"`},
-		{CircuitBreakerStatusChecking, `"CHECKING"`},
+		{CircuitBreakerStatusClosed, `"CLOSED"`},
 	}
 
 	for _, input := range inputs {

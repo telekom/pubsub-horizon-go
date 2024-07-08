@@ -13,16 +13,14 @@ import (
 type CircuitBreakerStatus string
 
 const (
-	CircuitBreakerStatusOpen         = "OPEN"
-	CircuitBreakerStatusRepublishing = "REPUBLISHING"
-	CircuitBreakerStatusCooldown     = "COOLDOWN"
-	CircuitBreakerStatusChecking     = "CHECKING"
+	CircuitBreakerStatusOpen   = "OPEN"
+	CircuitBreakerStatusClosed = "CLOSED"
 )
 
 func ParseCircuitBreakerStatus(s string) (CircuitBreakerStatus, error) {
 	switch CircuitBreakerStatus(s) {
 
-	case CircuitBreakerStatusOpen, CircuitBreakerStatusRepublishing, CircuitBreakerStatusCooldown, CircuitBreakerStatusChecking:
+	case CircuitBreakerStatusOpen, CircuitBreakerStatusClosed:
 		return CircuitBreakerStatus(s), nil
 
 	default:
