@@ -11,6 +11,7 @@ import (
 
 type CircuitBreakerMessage struct {
 	SubscriptionId    string                    `json:"subscriptionId"`
+	Environment       string                    `json:"environment"`
 	EventType         string                    `json:"eventType"`
 	LastModified      time.Time                 `json:"lastModified"`
 	OriginMessageId   string                    `json:"originMessageId"`
