@@ -13,8 +13,8 @@ import (
 type CircuitBreakerStatus string
 
 const (
-	CircuitBreakerStatusOpen   = "OPEN"
-	CircuitBreakerStatusClosed = "CLOSED"
+	CircuitBreakerStatusOpen   CircuitBreakerStatus = "OPEN"
+	CircuitBreakerStatusClosed CircuitBreakerStatus = "CLOSED"
 )
 
 func ParseCircuitBreakerStatus(s string) (CircuitBreakerStatus, error) {

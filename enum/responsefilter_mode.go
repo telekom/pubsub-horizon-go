@@ -13,8 +13,8 @@ import (
 type ResponseFilterMode string
 
 const (
-	ResponseFilterModeInclude = "INCLUDE"
-	ResponseFilterModeExclude = "EXCLUDE"
+	ResponseFilterModeInclude ResponseFilterMode = "INCLUDE"
+	ResponseFilterModeExclude ResponseFilterMode = "EXCLUDE"
 )
 
 func ParseResponseFilterMode(s string) (ResponseFilterMode, error) {
