@@ -11,6 +11,7 @@ import (
 
 type CircuitBreakerMessage struct {
 	SubscriptionId    string                    `json:"subscriptionId"`
+	EventType         string                    `json:"eventType"`
 	LastModified      time.Time                 `json:"lastModified"`
 	OriginMessageId   string                    `json:"originMessageId"`
 	Status            enum.CircuitBreakerStatus `json:"status"`
