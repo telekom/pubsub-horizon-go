@@ -16,6 +16,6 @@ type CircuitBreakerMessage struct {
 	LastModified      time.Time                 `json:"lastModified"`
 	OriginMessageId   string                    `json:"originMessageId"`
 	Status            enum.CircuitBreakerStatus `json:"status"`
-	LastRepublished   time.Time                 `json:"lastRepublished"`
+	LastRepublished   time.Time                 `json:"lastRepublished,omitempty"`
 	RepublishingCount int                       `json:"republishingCount"`
 }
