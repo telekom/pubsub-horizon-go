@@ -13,12 +13,12 @@ import (
 	"github.com/hazelcast/hazelcast-go-client/serialization"
 )
 
-type HazelcastCache[T any] struct {
+type HazelcastCache[T comparable] struct {
 	ctx    context.Context
 	client *hazelcast.Client
 }
 
-type HazelcastBasedCache[T any] interface {
+type HazelcastBasedCache[T comparable] interface {
 	Cache[T]
 	GetQuery(mapName string, query predicate.Predicate) ([]T, error)
 	GetClient() *hazelcast.Client
@@ -26,7 +26,7 @@ type HazelcastBasedCache[T any] interface {
 	AddListener(mapName string, listener Listener[T]) error
 }
 
-func NewHazelcastCache[T any](config hazelcast.Config) (*HazelcastCache[T], error) {
+func NewHazelcastCache[T comparable](config hazelcast.Config) (*HazelcastCache[T], error) {
 	var ctx = context.Background()
 
 	client, err := hazelcast.StartNewClientWithConfig(ctx, config)
@@ -37,7 +37,7 @@ func NewHazelcastCache[T any](config hazelcast.Config) (*HazelcastCache[T], erro
 	return &HazelcastCache[T]{ctx: ctx, client: client}, nil
 }
 
-func NewHazelcastCacheWithClient[T any](client *hazelcast.Client) *HazelcastCache[T] {
+func NewHazelcastCacheWithClient[T comparable](client *hazelcast.Client) *HazelcastCache[T] {
 	var ctx = context.Background()
 	return &HazelcastCache[T]{ctx, client}
 }

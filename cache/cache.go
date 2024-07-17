@@ -4,7 +4,7 @@
 
 package cache
 
-type Cache[T any] interface {
+type Cache[T comparable] interface {
 	Put(mapName string, key string, value T) error
 	Get(mapName string, key string) (*T, error)
 	Delete(mapName string, key string) error
