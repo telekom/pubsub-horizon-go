@@ -155,7 +155,7 @@ func (c *HazelcastCache[T]) AddListener(mapName string, listener Listener[T]) er
 			}
 
 			var oldObj T
-			if err := c.unmarshalHazelcastJson(event.Key, event.Value, &oldObj); err != nil {
+			if err := c.unmarshalHazelcastJson(event.Key, event.OldValue, &oldObj); err != nil {
 				listener.OnError(event, err)
 				return
 			}
