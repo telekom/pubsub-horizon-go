@@ -6,16 +6,16 @@ package message
 
 import (
 	"github.com/telekom/pubsub-horizon-go/enum"
-	"time"
+	"github.com/telekom/pubsub-horizon-go/types"
 )
 
 type CircuitBreakerMessage struct {
 	SubscriptionId    string                    `json:"subscriptionId"`
 	Environment       string                    `json:"environment"`
 	EventType         string                    `json:"eventType"`
-	LastModified      time.Time                 `json:"lastModified"`
+	LastModified      *types.Timestamp          `json:"lastModified"`
 	OriginMessageId   string                    `json:"originMessageId"`
 	Status            enum.CircuitBreakerStatus `json:"status"`
-	LastRepublished   time.Time                 `json:"lastRepublished"`
+	LastRepublished   *types.Timestamp          `json:"lastRepublished,omitempty"`
 	RepublishingCount int                       `json:"republishingCount"`
 }
