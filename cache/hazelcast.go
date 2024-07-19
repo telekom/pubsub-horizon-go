@@ -21,6 +21,7 @@ type HazelcastCache[T any] struct {
 type HazelcastBasedCache[T any] interface {
 	Cache[T]
 	GetQuery(mapName string, query predicate.Predicate) ([]T, error)
+	GetQueryWithContext(ctx context.Context, mapName string, query predicate.Predicate) ([]T, error)
 	GetClient() *hazelcast.Client
 	GetMap(mapKey string) (*hazelcast.Map, error)
 	AddListener(mapName string, listener Listener[T]) error
@@ -43,6 +44,10 @@ func NewHazelcastCacheWithClient[T any](client *hazelcast.Client) *HazelcastCach
 }
 
 func (c *HazelcastCache[T]) Put(mapName string, key string, value T) error {
+	return c.PutWithContext(c.ctx, mapName, key, value)
+}
+
+func (c *HazelcastCache[T]) PutWithContext(ctx context.Context, mapName string, key string, value T) error {
 	mp, err := c.client.GetMap(c.ctx, mapName)
 	if err != nil {
 		return err
@@ -53,16 +58,20 @@ func (c *HazelcastCache[T]) Put(mapName string, key string, value T) error {
 		return err
 	}
 
-	return mp.Set(c.ctx, key, serialization.JSON(bytes))
+	return mp.Set(ctx, key, serialization.JSON(bytes))
 }
 
 func (c *HazelcastCache[T]) Get(mapName string, key string) (*T, error) {
-	mp, err := c.client.GetMap(c.ctx, mapName)
+	return c.GetWithContext(c.ctx, mapName, key)
+}
+
+func (c *HazelcastCache[T]) GetWithContext(ctx context.Context, mapName string, key string) (*T, error) {
+	mp, err := c.client.GetMap(ctx, mapName)
 	if err != nil {
 		return nil, err
 	}
 
-	value, err := mp.Get(c.ctx, key)
+	value, err := mp.Get(ctx, key)
 	if err != nil {
 		return nil, err
 	}
@@ -80,6 +89,10 @@ func (c *HazelcastCache[T]) Get(mapName string, key string) (*T, error) {
 }
 
 func (c *HazelcastCache[T]) Delete(mapName string, key string) error {
+	return c.DeleteWithContext(c.ctx, mapName, key)
+}
+
+func (c *HazelcastCache[T]) DeleteWithContext(ctx context.Context, mapName string, key string) error {
 	mp, err := c.client.GetMap(c.ctx, mapName)
 	if err != nil {
 		return err
@@ -94,12 +107,16 @@ func (c *HazelcastCache[T]) Delete(mapName string, key string) error {
 }
 
 func (c *HazelcastCache[T]) GetQuery(mapName string, query predicate.Predicate) ([]T, error) {
-	mp, err := c.client.GetMap(c.ctx, mapName)
+	return c.GetQueryWithContext(c.ctx, mapName, query)
+}
+
+func (c *HazelcastCache[T]) GetQueryWithContext(ctx context.Context, mapName string, query predicate.Predicate) ([]T, error) {
+	mp, err := c.client.GetMap(ctx, mapName)
 	if err != nil {
 		return nil, err
 	}
 
-	entries, err := mp.GetEntrySetWithPredicate(c.ctx, query)
+	entries, err := mp.GetEntrySetWithPredicate(ctx, query)
 	if err != nil {
 		return nil, err
 	}
