@@ -29,6 +29,7 @@ type Subscription struct {
 	EnforceGetHealthCheck  bool                `json:"enforceGetHttpRequestMethodForHealthCheck"`
 	CircuitBreakerOptOut   bool                `json:"circuitBreakerOptOut"`
 	RetentionTime          string              `json:"eventRetentionTime"`
+	RedeliveriesPerSecond  int                 `json:"redeliveriesPerSecond"`
 }
 
 type SubscriptionTrigger struct {
