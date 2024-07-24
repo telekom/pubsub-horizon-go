@@ -10,12 +10,12 @@ import (
 )
 
 type CircuitBreakerMessage struct {
-	SubscriptionId    string                    `json:"subscriptionId"`
-	Environment       string                    `json:"environment"`
-	EventType         string                    `json:"eventType"`
-	LastModified      *types.Timestamp          `json:"lastModified"`
-	OriginMessageId   string                    `json:"originMessageId"`
-	Status            enum.CircuitBreakerStatus `json:"status"`
-	LastRepublished   *types.Timestamp          `json:"lastRepublished,omitempty"`
-	RepublishingCount int                       `json:"republishingCount"`
+	SubscriptionId  string                    `json:"subscriptionId"`
+	Environment     string                    `json:"environment"`
+	EventType       string                    `json:"eventType"`
+	LastModified    *types.Timestamp          `json:"lastModified"`
+	LastOpened      *types.Timestamp          `json:"lastOpened,omitempty"`
+	LoopCounter     int                       `json:"loopCounter"`
+	OriginMessageId string                    `json:"originMessageId"`
+	Status          enum.CircuitBreakerStatus `json:"status"`
 }
