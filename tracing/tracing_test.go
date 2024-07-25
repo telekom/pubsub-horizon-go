@@ -7,42 +7,9 @@ package tracing
 import (
 	"context"
 	"github.com/stretchr/testify/assert"
-	"go.opentelemetry.io/contrib/propagators/b3"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/sdk/resource"
-	tracesdk "go.opentelemetry.io/otel/sdk/trace"
-	"go.opentelemetry.io/otel/sdk/trace/tracetest"
-	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
-	"os"
 	"testing"
 	"time"
 )
-
-var (
-	traceExporter *tracetest.InMemoryExporter
-)
-
-func TestMain(m *testing.M) {
-	traceExporter = configureTestProvider()
-	os.Exit(m.Run())
-}
-
-func configureTestProvider() *tracetest.InMemoryExporter {
-	var exporter = tracetest.NewInMemoryExporter()
-	var provider = tracesdk.NewTracerProvider(
-		tracesdk.WithSyncer(exporter),
-		tracesdk.WithResource(resource.NewWithAttributes(
-			semconv.SchemaURL,
-			semconv.ServiceName("horizon-go"),
-		)),
-	)
-	otel.SetTracerProvider(provider)
-
-	var b3Propagator = b3.New(b3.WithInjectEncoding(b3.B3MultipleHeader))
-	otel.SetTextMapPropagator(b3Propagator)
-
-	return exporter
-}
 
 func TestTraceContext_StartSpan(t *testing.T) {
 	var assertions = assert.New(t)
