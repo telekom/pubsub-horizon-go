@@ -5,6 +5,7 @@
 package tracing
 
 import (
+	"context"
 	"github.com/stretchr/testify/assert"
 	"go.opentelemetry.io/contrib/propagators/b3"
 	"go.opentelemetry.io/otel"
@@ -45,7 +46,7 @@ func configureTestProvider() *tracetest.InMemoryExporter {
 
 func TestTraceContext_StartSpan(t *testing.T) {
 	var assertions = assert.New(t)
-	var traceCtx = NewTraceContext("myservice", false)
+	var traceCtx = NewTraceContext(context.Background(), "myservice", false)
 	defer traceExporter.Reset()
 
 	traceCtx.StartSpan("myspan")
@@ -66,7 +67,7 @@ func TestTraceContext_StartSpan(t *testing.T) {
 func TestTraceContext_StartDetailedSpan(t *testing.T) {
 	t.Run("detailed enabled", func(t *testing.T) {
 		var assertions = assert.New(t)
-		var detailedTraceCtx = NewTraceContext("myservice", true)
+		var detailedTraceCtx = NewTraceContext(context.Background(), "myservice", true)
 		defer traceExporter.Reset()
 
 		detailedTraceCtx.StartDetailedSpan("mydetailedspan")
@@ -79,7 +80,7 @@ func TestTraceContext_StartDetailedSpan(t *testing.T) {
 
 	t.Run("detailed disabled", func(t *testing.T) {
 		var assertions = assert.New(t)
-		var regularTraceCtx = NewTraceContext("myservice", false)
+		var regularTraceCtx = NewTraceContext(context.Background(), "myservice", false)
 		defer traceExporter.Reset()
 
 		regularTraceCtx.StartDetailedSpan("mydetailedspan")
