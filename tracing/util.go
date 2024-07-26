@@ -28,3 +28,29 @@ func WithB3FromMessage(ctx context.Context, msg *sarama.ConsumerMessage) context
 
 	return propagator.Extract(ctx, carrier)
 }
+
+func WithB3FromMap(ctx context.Context, b3Map map[string]string) context.Context {
+	var carrier = propagation.HeaderCarrier{}
+	var propagator = otel.GetTextMapPropagator()
+
+	for key, val := range b3Map {
+		if !strings.HasPrefix(strings.ToLower(key), "x-b3") {
+			continue
+		}
+		carrier.Set(key, val)
+	}
+
+	return propagator.Extract(ctx, carrier)
+}
+
+func DumpToB3Map(traceCtx *TraceContext) map[string]string {
+	var carrier = propagation.HeaderCarrier{}
+	var propagator = otel.GetTextMapPropagator()
+	propagator.Inject(traceCtx.Context(), carrier)
+
+	var b3Map = make(map[string]string)
+	for _, key := range carrier.Keys() {
+		b3Map[key] = carrier.Get(key)
+	}
+	return b3Map
+}

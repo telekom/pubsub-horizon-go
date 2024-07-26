@@ -100,3 +100,8 @@ func (c *TraceContext) GetSpanN(n int) trace.Span {
 func (c *TraceContext) LastSpan() trace.Span {
 	return c.GetSpanN(len(c.spans) - 1)
 }
+
+// Context returns the context used by the tracer.
+func (c *TraceContext) Context() context.Context {
+	return c.traceCtx
+}

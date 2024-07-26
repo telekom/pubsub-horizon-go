@@ -17,6 +17,7 @@ func TestTraceContext_StartSpan(t *testing.T) {
 	defer traceExporter.Reset()
 
 	traceCtx.StartSpan("myspan")
+	traceCtx.SetAttribute("foo", "bar")
 	traceCtx.EndCurrentSpan()
 
 	var snapshots = traceExporter.GetSpans().Snapshots()
@@ -26,6 +27,9 @@ func TestTraceContext_StartSpan(t *testing.T) {
 	assertions.Equal("myspan", firstSpan.Name())
 	assertions.Equal(0, firstSpan.ChildSpanCount())
 	assertions.LessOrEqual(firstSpan.EndTime(), time.Now())
+
+	assertions.Len(firstSpan.Attributes(), 1)
+	assertions.Equal("bar", firstSpan.Attributes()[0].Value.AsString())
 
 	assertions.Nil(traceCtx.CurrentSpan())
 	assertions.NotNil(traceCtx.LastSpan())
