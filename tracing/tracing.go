@@ -7,6 +7,7 @@ package tracing
 import (
 	"context"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 )
 
@@ -57,6 +58,13 @@ func (c *TraceContext) EndCurrentDetailedSpan() {
 		if currentSpan := c.CurrentSpan(); currentSpan != nil {
 			currentSpan.End()
 		}
+	}
+}
+
+// SetAttribute sets the value of the given key.
+func (c *TraceContext) SetAttribute(key string, value string) {
+	if currentSpan := c.CurrentSpan(); currentSpan != nil {
+		currentSpan.SetAttributes(attribute.String(key, value))
 	}
 }
 
