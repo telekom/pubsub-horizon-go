@@ -20,7 +20,7 @@ type TraceContext struct {
 }
 
 // NewTraceContext creates a new trace for the given service.
-// In additional detailed tracing can be enabled.
+// In addition, detailed tracing can be enabled.
 func NewTraceContext(ctx context.Context, service string, detailed bool) *TraceContext {
 	var provider = otel.GetTracerProvider()
 	return &TraceContext{
