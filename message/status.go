@@ -10,6 +10,7 @@ import (
 )
 
 type StatusMessage struct {
+	StateError
 	Uuid                     string                  `json:"uuid"`
 	Coordinates              *Coordinates            `json:"coordinates"`
 	Status                   enum.MessageStatus      `json:"status"`
@@ -23,7 +24,6 @@ type StatusMessage struct {
 	Topic                    string                  `json:"topic"`
 	Timestamp                time.Time               `json:"timestamp"`
 	Modified                 time.Time               `json:"modified"`
-	StateError               StateError              `json:"stateError"`
 	AppliedScopes            []string                `json:"appliedScopes"`
 	ScopeEvaluationResult    EvaluationResult        `json:"scopeEvaluationResult"`
 	ConsumerEvaluationResult EvaluationResult        `json:"consumerEvaluationResult"`
@@ -41,9 +41,8 @@ type EventDetails struct {
 }
 
 type StateError struct {
-	Message    string `json:"message"`
-	Type       string `json:"type"`
-	StackTrace string `json:"stackTrace"`
+	ErrorMessage string `json:"errorMessage,omitempty"`
+	ErrorType    string `json:"errorType,omitempty"`
 }
 
 type EvaluationResult struct {
