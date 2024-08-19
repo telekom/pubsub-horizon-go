@@ -10,10 +10,19 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-type HazelcastZerologLogger struct{}
+type HazelcastZerologLogger struct {
+	level zerolog.Level
+}
+
+func NewHazelcastZerologLogger(level zerolog.Level) *HazelcastZerologLogger {
+	return &HazelcastZerologLogger{level}
+}
 
 func (l *HazelcastZerologLogger) Log(weight logger.Weight, f func() string) {
-	log.WithLevel(l.translateWeight(weight)).Msgf("Hazelcast: %s", f())
+	var messageLevel = l.translateWeight(weight)
+	if messageLevel >= l.level {
+		log.WithLevel(messageLevel).Msgf("Hazelcast: %s", f())
+	}
 }
 
 func (*HazelcastZerologLogger) translateWeight(weight logger.Weight) zerolog.Level {
