@@ -7,7 +7,7 @@ toolchain go1.23.4
 require (
 	github.com/IBM/sarama v1.45.0
 	github.com/go-playground/validator/v10 v10.24.0
-	github.com/hazelcast/hazelcast-go-client v1.4.1
+	github.com/hazelcast/hazelcast-go-client v1.4.2
 	github.com/ory/dockertest/v3 v3.10.0
 	github.com/rs/zerolog v1.33.0
 	github.com/stretchr/testify v1.10.0
