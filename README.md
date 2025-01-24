@@ -12,10 +12,6 @@ Horizon Go is a library of code shared between newly written Go components withi
 [![Go Report Card](https://goreportcard.com/badge/github.com/telekom/pubsub-horizon-go)](https://goreportcard.com/report/github.com/telekom/pubsub-horizon-go)
 [![Go Test](https://github.com/telekom/pubsub-horizon-go/actions/workflows/go-test.yml/badge.svg)](https://github.com/telekom/pubsub-horizon-go/actions/workflows/go-test.yml)
 
-> **⚠️ Under construction ⚠️**
->
-> This library is currently under construction and not yet ready for use.
-
 ## How to use it
 `go get github.com/telekom/pubsub-horizon-go`
 
