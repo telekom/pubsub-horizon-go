@@ -7,10 +7,15 @@ package resource
 import "github.com/telekom/pubsub-horizon-go/enum"
 
 type SubscriptionResource struct {
-	Spec struct {
+	Metadata Metadata `json:"metadata"`
+	Spec     struct {
 		Subscription Subscription `json:"subscription"`
 		Environment  string       `json:"environment"`
 	} `json:"spec"`
+}
+
+type Metadata struct {
+	Annotations map[string]any `json:"annotations"`
 }
 
 type Subscription struct {
