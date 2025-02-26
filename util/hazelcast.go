@@ -12,16 +12,21 @@ import (
 
 type HazelcastZerologLogger struct {
 	level zerolog.Level
+	log   *zerolog.Logger
 }
 
 func NewHazelcastZerologLogger(level zerolog.Level) *HazelcastZerologLogger {
-	return &HazelcastZerologLogger{level}
+	return &HazelcastZerologLogger{level, &log.Logger}
+}
+
+func NewHazelcastZerologLoggerWithLogger(level zerolog.Level, logger *zerolog.Logger) *HazelcastZerologLogger {
+	return &HazelcastZerologLogger{level, logger}
 }
 
 func (l *HazelcastZerologLogger) Log(weight logger.Weight, f func() string) {
 	var messageLevel = l.translateWeight(weight)
 	if messageLevel >= l.level {
-		log.WithLevel(messageLevel).Msgf("Hazelcast: %s", f())
+		l.log.WithLevel(messageLevel).Msgf("Hazelcast: %s", f())
 	}
 }
 
