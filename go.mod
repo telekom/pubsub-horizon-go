@@ -2,11 +2,11 @@ module github.com/telekom/pubsub-horizon-go
 
 go 1.22.0
 
-toolchain go1.23.4
+toolchain go1.24.1
 
 require (
 	github.com/IBM/sarama v1.45.1
-	github.com/go-playground/validator/v10 v10.25.0
+	github.com/go-playground/validator/v10 v10.26.0
 	github.com/hazelcast/hazelcast-go-client v1.4.2
 	github.com/ory/dockertest/v3 v3.11.0
 	github.com/rs/zerolog v1.34.0
