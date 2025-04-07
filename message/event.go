@@ -10,7 +10,7 @@ type Event struct {
 	Source          string `json:"source" validate:"required"`
 	SpecVersion     string `json:"specVersion" validate:"required"`
 	DataContentType string `json:"dataContentType"`
-	DataRef         string `json:"dataRef"`
+	DataRef         string `json:"dataRef,omitempty"`
 	Time            string `json:"time" validate:"omitempty,isoTime"`
-	Data            any    `json:"data"`
+	Data            any    `json:"data,omitempty"`
 }
