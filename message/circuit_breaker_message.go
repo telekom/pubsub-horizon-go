@@ -15,6 +15,7 @@ type CircuitBreakerMessage struct {
 	EventType       string                    `json:"eventType"`
 	LastModified    *types.Timestamp          `json:"lastModified"`
 	LastOpened      *types.Timestamp          `json:"lastOpened,omitempty"`
+	PostponedUntil  *types.Timestamp          `json:"postponedUntil,omitempty"`
 	LoopCounter     int                       `json:"loopCounter"`
 	OriginMessageId string                    `json:"originMessageId"`
 	Status          enum.CircuitBreakerStatus `json:"status"`
