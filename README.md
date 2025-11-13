@@ -15,6 +15,14 @@ Horizon Go is a library of code shared between newly written Go components withi
 ## How to use it
 `go get github.com/telekom/pubsub-horizon-go`
 
+## Development
+
+### Linting
+Run linting to check code quality and format/fix:
+```bash
+golangci-lint run --fix
+```
+
 ## Contributing
 We're committed to open source, so we welcome and encourage everyone to join its developer community and contribute, whether it's through code or feedback.  
 By participating in this project, you agree to abide by its [Code of Conduct](./CODE_OF_CONDUCT.md) at all times.

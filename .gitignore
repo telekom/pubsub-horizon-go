@@ -13,3 +13,4 @@
 
 !.gitlab-ci.yml
 !.github/workflows/*.yml
+/cover.out

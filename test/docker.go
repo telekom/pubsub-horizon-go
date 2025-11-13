@@ -8,12 +8,13 @@ package test
 
 import (
 	"context"
+	"log"
+	"time"
+
 	"github.com/hazelcast/hazelcast-go-client"
 	"github.com/hazelcast/hazelcast-go-client/cluster"
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
-	"log"
-	"time"
 )
 
 var (
@@ -22,7 +23,7 @@ var (
 
 	hazelcastImage = EnvOrDefault("HAZELCAST_IMAGE", "hazelcast/hazelcast")
 	hazelcastTag   = EnvOrDefault("HAZELCAST_TAG", "5.3.6")
-	hazelcastHost  = EnvOrDefault("HAZELCAST_HOST", "localhost")
+	hazelcastHost  = EnvOrDefault("HAZELCAST_HOST", "0.0.0.0")
 	hazelcastPort  = EnvOrDefault("HAZELCAST_PORT", "5701")
 )
 
