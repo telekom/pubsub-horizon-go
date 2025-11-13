@@ -6,35 +6,35 @@ SPDX-PackageDownloadLocation = "https://github.com/telekom/horizon-go"
 [[annotations]]
 path = "docs/img/**"
 precedence = "aggregate"
-SPDX-FileCopyrightText = "Copyright 2024 Deutsche Telekom IT GmbH"
+SPDX-FileCopyrightText = "Copyright 2025 Deutsche Telekom AG"
 SPDX-License-Identifier = "CC-BY-4.0"
 
 [[annotations]]
 path = ["go.mod", "go.sum"]
 precedence = "aggregate"
-SPDX-FileCopyrightText = "Copyright 2024 Deutsche Telekom IT GmbH"
+SPDX-FileCopyrightText = "Copyright 2025 Deutsche Telekom AG"
 SPDX-License-Identifier = "Apache-2.0"
 
 [[annotations]]
 path = ["LICENSE", "CODEOWNERS"]
 precedence = "aggregate"
-SPDX-FileCopyrightText = "Copyright 2024 Deutsche Telekom IT GmbH"
+SPDX-FileCopyrightText = "Copyright 2025 Deutsche Telekom AG"
 SPDX-License-Identifier = "Apache-2.0"
 
 [[annotations]]
 path = ".pre-commit-config.yaml"
 precedence = "aggregate"
-SPDX-FileCopyrightText = "Copyright 2024 Deutsche Telekom IT GmbH"
+SPDX-FileCopyrightText = "Copyright 2025 Deutsche Telekom AG"
 SPDX-License-Identifier = "Apache-2.0"
 
 [[annotations]]
 path = "testdata/**"
 precedence = "aggregate"
-SPDX-FileCopyrightText = "Copyright 2024 Deutsche Telekom IT GmbH"
+SPDX-FileCopyrightText = "Copyright 2025 Deutsche Telekom AG"
 SPDX-License-Identifier = "Apache-2.0"
 
 [[annotations]]
 path = "REUSE.toml"
 precedence = "aggregate"
-SPDX-FileCopyrightText = "Copyright 2024 Deutsche Telekom IT GmbH"
+SPDX-FileCopyrightText = "Copyright 2025 Deutsche Telekom AG"
 SPDX-License-Identifier = "Apache-2.0"
