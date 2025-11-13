@@ -5,27 +5,27 @@
 package validation
 
 import (
+	"testing"
+
 	"github.com/go-playground/validator/v10"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 var validate *validator.Validate
 
 func TestNewValidator(t *testing.T) {
-	var assertions = assert.New(t)
+	assertions := assert.New(t)
 	assertions.NotPanics(func() {
 		validate = NewValidator()
 	})
 }
 
 func TestValidateEventType(t *testing.T) {
-	var inputs = []struct {
+	inputs := []struct {
 		Name        string
 		Value       any
 		ExpectError bool
 	}{
-
 		// Valid
 		{
 			Name: "valid struct",
@@ -47,8 +47,8 @@ func TestValidateEventType(t *testing.T) {
 
 	for _, input := range inputs {
 		t.Run(input.Name, func(t *testing.T) {
-			var assertions = assert.New(t)
-			var err = validate.Struct(input.Value)
+			assertions := assert.New(t)
+			err := validate.Struct(input.Value)
 
 			if input.ExpectError {
 				assertions.Error(err)
@@ -60,12 +60,11 @@ func TestValidateEventType(t *testing.T) {
 }
 
 func TestValidateIsoTime(t *testing.T) {
-	var inputs = []struct {
+	inputs := []struct {
 		Name        string
 		Value       any
 		ExpectError bool
 	}{
-
 		// Valid
 		{
 			Name: "valid struct",
@@ -87,7 +86,7 @@ func TestValidateIsoTime(t *testing.T) {
 
 	for _, input := range inputs {
 		t.Run(input.Name, func(t *testing.T) {
-			var assertions = assert.New(t)
+			assertions := assert.New(t)
 
 			if input.ExpectError {
 				assertions.Error(validate.Struct(input.Value))

@@ -25,20 +25,18 @@ const (
 
 func ParseMessageStatus(status string) (MessageStatus, error) {
 	switch MessageStatus(status) {
-
 	case StatusProcessed, StatusDelivering, StatusWaiting, StatusDelivered, StatusFailed, StatusDropped, StatusDuplicate:
 		return MessageStatus(status), nil
 
 	default:
 		return "", errors.New("invalid message status")
-
 	}
 }
 
 func (ms *MessageStatus) UnmarshalJSON(bytes []byte) error {
-	var data = string(bytes)
+	data := string(bytes)
 
-	if data == "null" {
+	if data == jsonNull {
 		return nil
 	}
 
@@ -56,7 +54,7 @@ func (ms *MessageStatus) UnmarshalJSON(bytes []byte) error {
 }
 
 func (ms *MessageStatus) MarshalJSON() ([]byte, error) {
-	var s = fmt.Sprintf(`"%s"`, ms.String())
+	s := fmt.Sprintf(`"%s"`, ms.String())
 	return []byte(s), nil
 }
 

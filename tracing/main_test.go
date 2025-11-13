@@ -5,6 +5,9 @@
 package tracing
 
 import (
+	"os"
+	"testing"
+
 	"go.opentelemetry.io/contrib/propagators/b3"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
@@ -12,8 +15,6 @@ import (
 	tracesdk "go.opentelemetry.io/otel/sdk/trace"
 	"go.opentelemetry.io/otel/sdk/trace/tracetest"
 	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
-	"os"
-	"testing"
 )
 
 var traceExporter *tracetest.InMemoryExporter
@@ -24,8 +25,8 @@ func TestMain(m *testing.M) {
 }
 
 func configureTestTraceExporter() *tracetest.InMemoryExporter {
-	var exporter = tracetest.NewInMemoryExporter()
-	var provider = tracesdk.NewTracerProvider(
+	exporter := tracetest.NewInMemoryExporter()
+	provider := tracesdk.NewTracerProvider(
 		tracesdk.WithSyncer(exporter),
 		tracesdk.WithResource(resource.NewWithAttributes(
 			semconv.SchemaURL,
@@ -34,7 +35,7 @@ func configureTestTraceExporter() *tracetest.InMemoryExporter {
 	)
 	otel.SetTracerProvider(provider)
 
-	var b3Propagator = b3.New(b3.WithInjectEncoding(b3.B3MultipleHeader))
+	b3Propagator := b3.New(b3.WithInjectEncoding(b3.B3MultipleHeader))
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(b3Propagator, propagation.TraceContext{}, propagation.Baggage{}))
 
 	return exporter

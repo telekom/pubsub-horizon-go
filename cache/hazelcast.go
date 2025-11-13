@@ -8,6 +8,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	"github.com/hazelcast/hazelcast-go-client"
 	"github.com/hazelcast/hazelcast-go-client/predicate"
 	"github.com/hazelcast/hazelcast-go-client/serialization"
@@ -27,7 +28,7 @@ type HazelcastBasedCache[T any] interface {
 }
 
 func NewHazelcastCache[T any](config hazelcast.Config) (*HazelcastCache[T], error) {
-	var ctx = context.Background()
+	ctx := context.Background()
 
 	client, err := hazelcast.StartNewClientWithConfig(ctx, config)
 	if err != nil {
@@ -38,7 +39,7 @@ func NewHazelcastCache[T any](config hazelcast.Config) (*HazelcastCache[T], erro
 }
 
 func NewHazelcastCacheWithClient[T any](client *hazelcast.Client) *HazelcastCache[T] {
-	var ctx = context.Background()
+	ctx := context.Background()
 	return &HazelcastCache[T]{ctx, client}
 }
 
@@ -68,10 +69,11 @@ func (c *HazelcastCache[T]) Get(mapName string, key string) (*T, error) {
 	}
 
 	if value == nil {
+		//nolint:nilnil // Cache miss is a valid state, not an error; also comply with api
 		return nil, nil
 	}
 
-	var unmarshalledValue = new(T)
+	unmarshalledValue := new(T)
 	if err := c.unmarshalHazelcastJson(key, value, unmarshalledValue); err != nil {
 		return nil, err
 	}
@@ -104,7 +106,7 @@ func (c *HazelcastCache[T]) GetQuery(mapName string, query predicate.Predicate) 
 		return nil, err
 	}
 
-	var unmarshalledValues = make([]T, 0)
+	unmarshalledValues := make([]T, 0)
 	for _, entry := range entries {
 		hzJsonValue, ok := entry.Value.(serialization.JSON)
 		if !ok {
@@ -166,7 +168,6 @@ func (c *HazelcastCache[T]) AddListener(mapName string, listener Listener[T]) er
 			listener.OnDelete(event)
 		},
 	}, true)
-
 	if err != nil {
 		return fmt.Errorf("failed to add listener: %w", err)
 	}

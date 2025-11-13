@@ -19,20 +19,18 @@ const (
 
 func ParseCircuitBreakerStatus(s string) (CircuitBreakerStatus, error) {
 	switch CircuitBreakerStatus(s) {
-
 	case CircuitBreakerStatusOpen, CircuitBreakerStatusClosed:
 		return CircuitBreakerStatus(s), nil
 
 	default:
 		return "", fmt.Errorf("could not parse '%s' as circuitBreakerStatus", s)
-
 	}
 }
 
 func (cbStatus *CircuitBreakerStatus) UnmarshalJSON(bytes []byte) error {
-	var data = string(bytes)
+	data := string(bytes)
 
-	if data == "null" {
+	if data == jsonNull {
 		return nil
 	}
 
@@ -50,7 +48,7 @@ func (cbStatus *CircuitBreakerStatus) UnmarshalJSON(bytes []byte) error {
 }
 
 func (cbStatus *CircuitBreakerStatus) MarshalJSON() ([]byte, error) {
-	var s = fmt.Sprintf(`"%s"`, cbStatus.String())
+	s := fmt.Sprintf(`"%s"`, cbStatus.String())
 	return []byte(s), nil
 }
 

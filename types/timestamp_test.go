@@ -6,14 +6,15 @@ package types
 
 import (
 	"encoding/json"
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCircuitBreakerTime_MarshalJSON(t *testing.T) {
-	var assertions = assert.New(t)
-	var dummyTime = time.Date(1, 1, 1, 0, 0, 0, 0, time.UTC)
+	assertions := assert.New(t)
+	dummyTime := time.Date(1, 1, 1, 0, 0, 0, 0, time.UTC)
 
 	bytes, err := dummyTime.MarshalJSON()
 	assertions.NoError(err)
@@ -21,16 +22,16 @@ func TestCircuitBreakerTime_MarshalJSON(t *testing.T) {
 }
 
 func TestCircuitBreakerTime_UnmarshalJSON(t *testing.T) {
-	var assertions = assert.New(t)
-	var expectation = time.Date(1, 1, 1, 0, 0, 0, 0, time.UTC)
-	var bytes = []byte(`{"time": "0001-01-01T00:00:00Z"}`)
+	assertions := assert.New(t)
+	expectation := time.Date(1, 1, 1, 0, 0, 0, 0, time.UTC)
+	bytes := []byte(`{"time": "0001-01-01T00:00:00Z"}`)
 
-	var dummy = struct {
+	dummy := struct {
 		Timestamp Timestamp `json:"time"`
 	}{}
 
 	assertions.NoError(json.Unmarshal(bytes, &dummy))
 
-	var unmarshalledTime = dummy.Timestamp.ToTime()
+	unmarshalledTime := dummy.Timestamp.ToTime()
 	assertions.True(unmarshalledTime.Equal(expectation))
 }

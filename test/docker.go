@@ -43,17 +43,14 @@ func StartDocker() {
 
 	setupHazelcast()
 
-	err = pool.Retry(func() error {
-		return pingHazelcast()
-	})
-
+	err = pool.Retry(pingHazelcast)
 	if err != nil {
 		log.Fatalf("Could not reach hazelcast after several tries: %s", err)
 	}
 }
 
 func StopDocker() {
-	var err = pool.Purge(hazelcastContainer)
+	err := pool.Purge(hazelcastContainer)
 	if err != nil {
 		log.Fatalf("Could not purge hazelcast container: %s", err)
 	}
@@ -78,14 +75,13 @@ func setupHazelcast() {
 			Name: "no",
 		}
 	})
-
 	if err != nil {
 		log.Fatalf("Could not create hazelcast container:  %s", err)
 	}
 }
 
 func pingHazelcast() error {
-	var ctx = context.Background()
+	ctx := context.Background()
 	config := hazelcast.NewConfig()
 
 	config.Cluster.Name = "horizon"

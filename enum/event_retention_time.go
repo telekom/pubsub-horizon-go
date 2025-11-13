@@ -35,7 +35,7 @@ var EventRetentionTimes = map[EventRetentionTime]struct {
 }
 
 func ParseEventRetentionTime(s string) (EventRetentionTime, error) {
-	for key, _ := range EventRetentionTimes {
+	for key := range EventRetentionTimes {
 		if string(key) == s {
 			return key, nil
 		}
@@ -44,9 +44,9 @@ func ParseEventRetentionTime(s string) (EventRetentionTime, error) {
 }
 
 func (ttl *EventRetentionTime) UnmarshalJSON(bytes []byte) error {
-	var data = string(bytes)
+	data := string(bytes)
 
-	if data == "null" {
+	if data == jsonNull {
 		return nil
 	}
 

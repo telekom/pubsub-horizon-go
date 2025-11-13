@@ -5,12 +5,13 @@
 package enum
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestParseDeliveryType(t *testing.T) {
-	var inputs = []struct {
+	inputs := []struct {
 		Value       string
 		Expected    DeliveryType
 		ExpectError bool
@@ -23,7 +24,7 @@ func TestParseDeliveryType(t *testing.T) {
 
 	for _, input := range inputs {
 		t.Run(input.Value, func(t *testing.T) {
-			var assertions = assert.New(t)
+			assertions := assert.New(t)
 
 			deliveryType, err := ParseDeliveryType(input.Value)
 			assertions.Equal(input.Expected, deliveryType)
@@ -33,7 +34,7 @@ func TestParseDeliveryType(t *testing.T) {
 }
 
 func TestDeliveryType_UnmarshalJSON(t *testing.T) {
-	var inputs = []struct {
+	inputs := []struct {
 		Value       string
 		Expected    DeliveryType
 		ExpectError bool
@@ -46,10 +47,10 @@ func TestDeliveryType_UnmarshalJSON(t *testing.T) {
 
 	for _, input := range inputs {
 		t.Run(input.Value, func(t *testing.T) {
-			var assertions = assert.New(t)
-			var deliveryType = new(DeliveryType)
+			assertions := assert.New(t)
+			deliveryType := new(DeliveryType)
 
-			var err = deliveryType.UnmarshalJSON([]byte(input.Value))
+			err := deliveryType.UnmarshalJSON([]byte(input.Value))
 			if input.ExpectError {
 				assertions.Error(err)
 			} else {
@@ -60,7 +61,7 @@ func TestDeliveryType_UnmarshalJSON(t *testing.T) {
 }
 
 func TestDeliveryType_MarshalJSON(t *testing.T) {
-	var inputs = []struct {
+	inputs := []struct {
 		Value    DeliveryType
 		Expected string
 	}{
@@ -70,7 +71,7 @@ func TestDeliveryType_MarshalJSON(t *testing.T) {
 
 	for _, input := range inputs {
 		t.Run(input.Value.String(), func(t *testing.T) {
-			var assertions = assert.New(t)
+			assertions := assert.New(t)
 			marshalled, err := input.Value.MarshalJSON()
 			assertions.NoError(err)
 			assertions.Equal(input.Expected, string(marshalled))

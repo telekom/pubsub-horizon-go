@@ -19,20 +19,18 @@ const (
 
 func ParseResponseFilterMode(s string) (ResponseFilterMode, error) {
 	switch strings.ToLower(s) {
-
 	case "include", "exclude":
 		return ResponseFilterMode(s), nil
 
 	default:
 		return "", fmt.Errorf("could not parse '%s' as response-filter-mode", s)
-
 	}
 }
 
 func (m *ResponseFilterMode) UnmarshalJSON(bytes []byte) error {
-	var data = string(bytes)
+	data := string(bytes)
 
-	if data == "null" {
+	if data == jsonNull {
 		return nil
 	}
 
@@ -50,7 +48,7 @@ func (m *ResponseFilterMode) UnmarshalJSON(bytes []byte) error {
 }
 
 func (m *ResponseFilterMode) MarshalJSON() ([]byte, error) {
-	var s = fmt.Sprintf(`"%s"`, m.String())
+	s := fmt.Sprintf(`"%s"`, m.String())
 	return []byte(s), nil
 }
 

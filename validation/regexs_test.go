@@ -5,12 +5,13 @@
 package validation
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestEventTypeRegEx(t *testing.T) {
-	var inputs = []struct {
+	inputs := []struct {
 		Value    string
 		Expected bool
 	}{
@@ -19,7 +20,7 @@ func TestEventTypeRegEx(t *testing.T) {
 	}
 
 	for _, input := range inputs {
-		var assertions = assert.New(t)
+		assertions := assert.New(t)
 		t.Run(input.Value, func(t *testing.T) {
 			assertions.Equal(input.Expected, EventTypeRegEx.MatchString(input.Value))
 		})
@@ -27,7 +28,7 @@ func TestEventTypeRegEx(t *testing.T) {
 }
 
 func TestIso8601RegEx(t *testing.T) {
-	var inputs = []struct {
+	inputs := []struct {
 		Value    string
 		Expected bool
 	}{
@@ -36,7 +37,7 @@ func TestIso8601RegEx(t *testing.T) {
 	}
 
 	for _, input := range inputs {
-		var assertions = assert.New(t)
+		assertions := assert.New(t)
 		t.Run(input.Value, func(t *testing.T) {
 			assertions.Equal(input.Expected, Iso8601RegEx.MatchString(input.Value))
 		})

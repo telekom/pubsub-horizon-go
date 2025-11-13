@@ -19,7 +19,6 @@ const (
 
 func ParseDeliveryType(s string) (DeliveryType, error) {
 	switch strings.ToLower(s) {
-
 	case "sse":
 		return DeliveryTypeSse, nil
 
@@ -28,14 +27,13 @@ func ParseDeliveryType(s string) (DeliveryType, error) {
 
 	default:
 		return "", fmt.Errorf("could not parse '%s' as delivery type", s)
-
 	}
 }
 
 func (t *DeliveryType) UnmarshalJSON(bytes []byte) error {
-	var data = string(bytes)
+	data := string(bytes)
 
-	if data == "null" {
+	if data == jsonNull {
 		return nil
 	}
 
@@ -53,7 +51,7 @@ func (t *DeliveryType) UnmarshalJSON(bytes []byte) error {
 }
 
 func (t *DeliveryType) MarshalJSON() ([]byte, error) {
-	var s = fmt.Sprintf(`"%s"`, t.String())
+	s := fmt.Sprintf(`"%s"`, t.String())
 	return []byte(s), nil
 }
 

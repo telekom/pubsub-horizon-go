@@ -13,20 +13,15 @@ import (
 
 type Timestamp time.Time
 
-func NewTimestamp(time time.Time) *Timestamp {
-	var timestamp = Timestamp(time)
-	return &timestamp
-}
-
 func (c *Timestamp) MarshalJSON() ([]byte, error) {
-	var current = time.Time(*c)
+	current := time.Time(*c)
 
-	var s = fmt.Sprintf(`"%s"`, current.Format(time.RFC3339))
+	s := fmt.Sprintf(`"%s"`, current.Format(time.RFC3339))
 	return []byte(s), nil
 }
 
 func (c *Timestamp) UnmarshalJSON(bytes []byte) error {
-	var data = string(bytes)
+	data := string(bytes)
 	var parsedTime time.Time
 	var err error
 
