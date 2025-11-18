@@ -16,23 +16,23 @@ type MockListener[T TestDummy] struct {
 	err            error
 }
 
-func (m *MockListener[T]) OnAdd(event *hazelcast.EntryNotified, obj TestDummy) {
-	_, _ = event, obj
+// event, obj
+func (m *MockListener[T]) OnAdd(_ *hazelcast.EntryNotified, _ TestDummy) {
 	m.onAddCalled = true
 }
 
-func (m *MockListener[T]) OnUpdate(event *hazelcast.EntryNotified, obj TestDummy, oldObj TestDummy) {
-	_, _, _ = event, obj, oldObj
+// event, obj, oldObj
+func (m *MockListener[T]) OnUpdate(_ *hazelcast.EntryNotified, _ TestDummy, _ TestDummy) {
 	m.onUpdateCalled = true
 }
 
-func (m *MockListener[T]) OnDelete(event *hazelcast.EntryNotified) {
-	_ = event
+// event
+func (m *MockListener[T]) OnDelete(_ *hazelcast.EntryNotified) {
 	m.onDeleteCalled = true
 }
 
-func (m *MockListener[T]) OnError(event *hazelcast.EntryNotified, err error) {
-	_ = event
+// event
+func (m *MockListener[T]) OnError(_ *hazelcast.EntryNotified, err error) {
 	m.onErrorCalled = true
 	m.err = err
 }
