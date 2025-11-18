@@ -7,8 +7,6 @@ package enum
 import (
 	"errors"
 	"fmt"
-	"strconv"
-	"strings"
 )
 
 type MessageStatus string
@@ -34,23 +32,7 @@ func ParseMessageStatus(status string) (MessageStatus, error) {
 }
 
 func (ms *MessageStatus) UnmarshalJSON(bytes []byte) error {
-	data := string(bytes)
-
-	if data == jsonNull {
-		return nil
-	}
-
-	if strings.HasPrefix(data, `"`) && strings.HasSuffix(data, `"`) {
-		data, _ = strconv.Unquote(data)
-	}
-
-	messageStatus, err := ParseMessageStatus(data)
-	if err != nil {
-		return err
-	}
-
-	*ms = messageStatus
-	return nil
+	return UnmarshalEnum(bytes, ms, ParseMessageStatus)
 }
 
 func (ms *MessageStatus) MarshalJSON() ([]byte, error) {

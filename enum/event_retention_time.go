@@ -7,8 +7,6 @@ package enum
 import (
 	"encoding/json"
 	"fmt"
-	"strconv"
-	"strings"
 )
 
 type EventRetentionTime string
@@ -44,23 +42,7 @@ func ParseEventRetentionTime(s string) (EventRetentionTime, error) {
 }
 
 func (ttl *EventRetentionTime) UnmarshalJSON(bytes []byte) error {
-	data := string(bytes)
-
-	if data == jsonNull {
-		return nil
-	}
-
-	if strings.HasPrefix(data, `"`) && strings.HasSuffix(data, `"`) {
-		data, _ = strconv.Unquote(data)
-	}
-
-	eventRetentionTime, err := ParseEventRetentionTime(data)
-	if err != nil {
-		return err
-	}
-
-	*ttl = eventRetentionTime
-	return nil
+	return UnmarshalEnum(bytes, ttl, ParseEventRetentionTime)
 }
 
 func (ttl *EventRetentionTime) MarshalJSON() ([]byte, error) {

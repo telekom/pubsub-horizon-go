@@ -6,8 +6,6 @@ package enum
 
 import (
 	"fmt"
-	"strconv"
-	"strings"
 )
 
 type CircuitBreakerStatus string
@@ -28,23 +26,7 @@ func ParseCircuitBreakerStatus(s string) (CircuitBreakerStatus, error) {
 }
 
 func (cbStatus *CircuitBreakerStatus) UnmarshalJSON(bytes []byte) error {
-	data := string(bytes)
-
-	if data == jsonNull {
-		return nil
-	}
-
-	if strings.HasPrefix(data, `"`) && strings.HasSuffix(data, `"`) {
-		data, _ = strconv.Unquote(data)
-	}
-
-	circuitBreakerStatus, err := ParseCircuitBreakerStatus(data)
-	if err != nil {
-		return err
-	}
-
-	*cbStatus = circuitBreakerStatus
-	return nil
+	return UnmarshalEnum(bytes, cbStatus, ParseCircuitBreakerStatus)
 }
 
 func (cbStatus *CircuitBreakerStatus) MarshalJSON() ([]byte, error) {

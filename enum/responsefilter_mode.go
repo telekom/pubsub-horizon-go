@@ -6,7 +6,6 @@ package enum
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 )
 
@@ -28,23 +27,7 @@ func ParseResponseFilterMode(s string) (ResponseFilterMode, error) {
 }
 
 func (m *ResponseFilterMode) UnmarshalJSON(bytes []byte) error {
-	data := string(bytes)
-
-	if data == jsonNull {
-		return nil
-	}
-
-	if strings.HasPrefix(data, `"`) && strings.HasSuffix(data, `"`) {
-		data, _ = strconv.Unquote(data)
-	}
-
-	rfm, err := ParseResponseFilterMode(data)
-	if err != nil {
-		return err
-	}
-
-	*m = rfm
-	return nil
+	return UnmarshalEnum(bytes, m, ParseResponseFilterMode)
 }
 
 func (m *ResponseFilterMode) MarshalJSON() ([]byte, error) {

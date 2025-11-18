@@ -6,7 +6,6 @@ package enum
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 )
 
@@ -31,23 +30,7 @@ func ParseDeliveryType(s string) (DeliveryType, error) {
 }
 
 func (t *DeliveryType) UnmarshalJSON(bytes []byte) error {
-	data := string(bytes)
-
-	if data == jsonNull {
-		return nil
-	}
-
-	if strings.HasPrefix(data, `"`) && strings.HasSuffix(data, `"`) {
-		data, _ = strconv.Unquote(data)
-	}
-
-	deliveryType, err := ParseDeliveryType(data)
-	if err != nil {
-		return err
-	}
-
-	*t = deliveryType
-	return nil
+	return UnmarshalEnum(bytes, t, ParseDeliveryType)
 }
 
 func (t *DeliveryType) MarshalJSON() ([]byte, error) {
