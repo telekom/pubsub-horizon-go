@@ -1,4 +1,4 @@
-// Copyright 2024 Deutsche Telekom IT GmbH
+// Copyright 2025 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -6,7 +6,6 @@ package enum
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 )
 
@@ -19,7 +18,6 @@ const (
 
 func ParseDeliveryType(s string) (DeliveryType, error) {
 	switch strings.ToLower(s) {
-
 	case "sse":
 		return DeliveryTypeSse, nil
 
@@ -28,32 +26,15 @@ func ParseDeliveryType(s string) (DeliveryType, error) {
 
 	default:
 		return "", fmt.Errorf("could not parse '%s' as delivery type", s)
-
 	}
 }
 
 func (t *DeliveryType) UnmarshalJSON(bytes []byte) error {
-	var data = string(bytes)
-
-	if data == "null" {
-		return nil
-	}
-
-	if strings.HasPrefix(data, `"`) && strings.HasSuffix(data, `"`) {
-		data, _ = strconv.Unquote(data)
-	}
-
-	deliveryType, err := ParseDeliveryType(data)
-	if err != nil {
-		return err
-	}
-
-	*t = deliveryType
-	return nil
+	return UnmarshalEnum(bytes, t, ParseDeliveryType)
 }
 
 func (t *DeliveryType) MarshalJSON() ([]byte, error) {
-	var s = fmt.Sprintf(`"%s"`, t.String())
+	s := fmt.Sprintf(`"%s"`, t.String())
 	return []byte(s), nil
 }
 

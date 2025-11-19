@@ -1,16 +1,17 @@
-// Copyright 2024 Deutsche Telekom IT GmbH
+// Copyright 2025 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
 
 package enum
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestParseCircuitBreakerStatus(t *testing.T) {
-	var inputs = []struct {
+	inputs := []struct {
 		Value       string
 		Expected    CircuitBreakerStatus
 		ExpectError bool
@@ -22,7 +23,7 @@ func TestParseCircuitBreakerStatus(t *testing.T) {
 
 	for _, input := range inputs {
 		t.Run(input.Value, func(t *testing.T) {
-			var assertions = assert.New(t)
+			assertions := assert.New(t)
 
 			circuitBreakerStatus, err := ParseCircuitBreakerStatus(input.Value)
 			assertions.Equal(input.Expected, circuitBreakerStatus)
@@ -32,7 +33,7 @@ func TestParseCircuitBreakerStatus(t *testing.T) {
 }
 
 func TestCircuitBreakerStatus_UnmarshalJSON(t *testing.T) {
-	var inputs = []struct {
+	inputs := []struct {
 		Value       string
 		Expected    CircuitBreakerStatus
 		ExpectError bool
@@ -44,10 +45,10 @@ func TestCircuitBreakerStatus_UnmarshalJSON(t *testing.T) {
 
 	for _, input := range inputs {
 		t.Run(input.Value, func(t *testing.T) {
-			var assertions = assert.New(t)
-			var cbStatus = new(CircuitBreakerStatus)
+			assertions := assert.New(t)
+			cbStatus := new(CircuitBreakerStatus)
 
-			var err = cbStatus.UnmarshalJSON([]byte(input.Value))
+			err := cbStatus.UnmarshalJSON([]byte(input.Value))
 			if input.ExpectError {
 				assertions.Error(err)
 			} else {
@@ -58,7 +59,7 @@ func TestCircuitBreakerStatus_UnmarshalJSON(t *testing.T) {
 }
 
 func TestCircuitBreakerStatus_MarshalJSON(t *testing.T) {
-	var inputs = []struct {
+	inputs := []struct {
 		Value    CircuitBreakerStatus
 		Expected string
 	}{
@@ -68,7 +69,7 @@ func TestCircuitBreakerStatus_MarshalJSON(t *testing.T) {
 
 	for _, input := range inputs {
 		t.Run(input.Value.String(), func(t *testing.T) {
-			var assertions = assert.New(t)
+			assertions := assert.New(t)
 			marshalled, err := input.Value.MarshalJSON()
 			assertions.NoError(err)
 			assertions.Equal(input.Expected, string(marshalled))

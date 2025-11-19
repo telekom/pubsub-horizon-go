@@ -1,16 +1,17 @@
-// Copyright 2024 Deutsche Telekom IT GmbH
+// Copyright 2025 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
 
 package enum
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestParseEventRetentionTime(t *testing.T) {
-	var inputs = []struct {
+	inputs := []struct {
 		Value       string
 		Expected    EventRetentionTime
 		ExpectError bool
@@ -26,7 +27,7 @@ func TestParseEventRetentionTime(t *testing.T) {
 
 	for _, input := range inputs {
 		t.Run(input.Value, func(t *testing.T) {
-			var assertions = assert.New(t)
+			assertions := assert.New(t)
 
 			eventRetentionTime, err := ParseEventRetentionTime(input.Value)
 			assertions.Equal(input.Expected, eventRetentionTime)
@@ -36,7 +37,7 @@ func TestParseEventRetentionTime(t *testing.T) {
 }
 
 func TestRoverString(t *testing.T) {
-	var inputs = []struct {
+	inputs := []struct {
 		Value       EventRetentionTime
 		Expected    string
 		ExpectError bool
@@ -51,7 +52,7 @@ func TestRoverString(t *testing.T) {
 
 	for _, input := range inputs {
 		t.Run(input.Value.ToRoverConfigString(), func(t *testing.T) {
-			var assertions = assert.New(t)
+			assertions := assert.New(t)
 
 			eventRetentionTime := input.Value.ToRoverConfigString()
 			assertions.Equal(input.Expected, eventRetentionTime)
@@ -60,7 +61,7 @@ func TestRoverString(t *testing.T) {
 }
 
 func TestEventRetentionTime_UnmarshalJSON(t *testing.T) {
-	var inputs = []struct {
+	inputs := []struct {
 		Value       string
 		Expected    EventRetentionTime
 		ExpectError bool
@@ -91,7 +92,7 @@ func TestEventRetentionTime_UnmarshalJSON(t *testing.T) {
 }
 
 func TestEventRetentionTime_MarshalJSON(t *testing.T) {
-	var inputs = []struct {
+	inputs := []struct {
 		Value    EventRetentionTime
 		Expected string
 	}{
@@ -105,7 +106,7 @@ func TestEventRetentionTime_MarshalJSON(t *testing.T) {
 
 	for _, input := range inputs {
 		t.Run(input.Value.ToRoverConfigString(), func(t *testing.T) {
-			var assertions = assert.New(t)
+			assertions := assert.New(t)
 			marshalled, err := input.Value.MarshalJSON()
 			assertions.NoError(err)
 			assertions.Equal(input.Expected, string(marshalled))

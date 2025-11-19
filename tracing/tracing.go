@@ -1,4 +1,4 @@
-// Copyright 2024 Deutsche Telekom IT GmbH
+// Copyright 2025 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -6,6 +6,7 @@ package tracing
 
 import (
 	"context"
+
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
@@ -22,7 +23,7 @@ type TraceContext struct {
 // NewTraceContext creates a new trace for the given service.
 // In addition, detailed tracing can be enabled.
 func NewTraceContext(ctx context.Context, service string, detailed bool) *TraceContext {
-	var provider = otel.GetTracerProvider()
+	provider := otel.GetTracerProvider()
 	return &TraceContext{
 		tracer:   provider.Tracer(service),
 		traceCtx: ctx,
@@ -32,6 +33,8 @@ func NewTraceContext(ctx context.Context, service string, detailed bool) *TraceC
 }
 
 // StartSpan starts a new span.
+//
+//nolint:spancheck // Span lifecycle is managed by TraceContext; ended via EndCurrentSpan()
 func (c *TraceContext) StartSpan(name string) {
 	var span trace.Span
 	c.traceCtx, span = c.tracer.Start(c.traceCtx, name)
@@ -79,7 +82,7 @@ func (c *TraceContext) RootSpan() trace.Span {
 // CurrentSpan returns the most recent span that is still recording (hasn't ended).
 func (c *TraceContext) CurrentSpan() trace.Span {
 	for i := len(c.spans) - 1; i >= 0; i-- {
-		var span = c.spans[i]
+		span := c.spans[i]
 		if span.IsRecording() {
 			return span
 		}
@@ -89,7 +92,7 @@ func (c *TraceContext) CurrentSpan() trace.Span {
 
 // GetSpanN retrieves the span with the index of n.
 func (c *TraceContext) GetSpanN(n int) trace.Span {
-	var exists = (len(c.spans)-1) >= n && n >= 0
+	exists := (len(c.spans)-1) >= n && n >= 0
 	if exists {
 		return c.spans[n]
 	}

@@ -1,4 +1,4 @@
-// Copyright 2024 Deutsche Telekom IT GmbH
+// Copyright 2025 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -16,19 +16,23 @@ type MockListener[T TestDummy] struct {
 	err            error
 }
 
-func (m *MockListener[T]) OnAdd(event *hazelcast.EntryNotified, obj TestDummy) {
+// event, obj
+func (m *MockListener[T]) OnAdd(_ *hazelcast.EntryNotified, _ TestDummy) {
 	m.onAddCalled = true
 }
 
-func (m *MockListener[T]) OnUpdate(event *hazelcast.EntryNotified, obj TestDummy, oldObj TestDummy) {
+// event, obj, oldObj
+func (m *MockListener[T]) OnUpdate(_ *hazelcast.EntryNotified, _ TestDummy, _ TestDummy) {
 	m.onUpdateCalled = true
 }
 
-func (m *MockListener[T]) OnDelete(event *hazelcast.EntryNotified) {
+// event
+func (m *MockListener[T]) OnDelete(_ *hazelcast.EntryNotified) {
 	m.onDeleteCalled = true
 }
 
-func (m *MockListener[T]) OnError(event *hazelcast.EntryNotified, err error) {
+// event
+func (m *MockListener[T]) OnError(_ *hazelcast.EntryNotified, err error) {
 	m.onErrorCalled = true
 	m.err = err
 }

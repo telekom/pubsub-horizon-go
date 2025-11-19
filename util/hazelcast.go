@@ -1,4 +1,4 @@
-// Copyright 2024 Deutsche Telekom IT GmbH
+// Copyright 2025 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -14,12 +14,8 @@ type HazelcastZerologLogger struct {
 	level zerolog.Level
 }
 
-func NewHazelcastZerologLogger(level zerolog.Level) *HazelcastZerologLogger {
-	return &HazelcastZerologLogger{level}
-}
-
 func (l *HazelcastZerologLogger) Log(weight logger.Weight, f func() string) {
-	var messageLevel = l.translateWeight(weight)
+	messageLevel := l.translateWeight(weight)
 	if messageLevel >= l.level {
 		log.WithLevel(messageLevel).Msgf("Hazelcast: %s", f())
 	}
@@ -27,7 +23,6 @@ func (l *HazelcastZerologLogger) Log(weight logger.Weight, f func() string) {
 
 func (*HazelcastZerologLogger) translateWeight(weight logger.Weight) zerolog.Level {
 	switch weight {
-
 	case logger.WeightDebug, logger.WeightTrace:
 		return zerolog.DebugLevel
 

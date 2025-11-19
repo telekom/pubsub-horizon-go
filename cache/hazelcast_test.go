@@ -1,18 +1,19 @@
-// Copyright 2024 Deutsche Telekom IT GmbH
+// Copyright 2025 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
 
 package cache
 
 import (
+	"os"
+	"testing"
+	"time"
+
 	"github.com/hazelcast/hazelcast-go-client"
 	"github.com/hazelcast/hazelcast-go-client/cluster"
 	"github.com/hazelcast/hazelcast-go-client/predicate"
 	"github.com/stretchr/testify/assert"
 	"github.com/telekom/pubsub-horizon-go/test"
-	"os"
-	"testing"
-	"time"
 )
 
 var cache *HazelcastCache[TestDummy]
@@ -29,9 +30,9 @@ func TestMain(m *testing.M) {
 }
 
 func TestNewCache(t *testing.T) {
-	var assertions = assert.New(t)
+	assertions := assert.New(t)
 
-	var config = hazelcast.Config{}
+	config := hazelcast.Config{}
 	config.Cluster.Name = "horizon"
 	config.Cluster.Network.SetAddresses(test.GetHazelcastHost())
 	config.Cluster.ConnectionStrategy.ReconnectMode = cluster.ReconnectModeOff
@@ -43,14 +44,14 @@ func TestNewCache(t *testing.T) {
 }
 
 func TestNewCacheWithClient(t *testing.T) {
-	var assertions = assert.New(t)
-	var cacheWithSameClient = NewHazelcastCacheWithClient[TestDummy](cache.client)
+	assertions := assert.New(t)
+	cacheWithSameClient := NewHazelcastCacheWithClient[TestDummy](cache.client)
 	assertions.Equal(cache.client, cacheWithSameClient.client)
 }
 
 func TestCache_Put(t *testing.T) {
-	var assertions = assert.New(t)
-	var dummy = TestDummy{
+	assertions := assert.New(t)
+	dummy := TestDummy{
 		Foo: "bar",
 	}
 
@@ -58,15 +59,15 @@ func TestCache_Put(t *testing.T) {
 }
 
 func TestCache_Get(t *testing.T) {
-	var assertions = assert.New(t)
+	assertions := assert.New(t)
 	dummy, err := cache.Get("testMap", "dummy")
 	assertions.NoError(err)
 	assertions.Equal("bar", dummy.Foo)
 }
 
 func TestCache_GetQuery(t *testing.T) {
-	var assertions = assert.New(t)
-	var query = predicate.Equal("foo", "bar")
+	assertions := assert.New(t)
+	query := predicate.Equal("foo", "bar")
 
 	results, err := cache.GetQuery("testMap", query)
 	assertions.NoError(err)
@@ -75,9 +76,9 @@ func TestCache_GetQuery(t *testing.T) {
 }
 
 func TestCache_Delete(t *testing.T) {
-	var assertions = assert.New(t)
+	assertions := assert.New(t)
 
-	var dummy = TestDummy{
+	dummy := TestDummy{
 		Foo: "bar",
 	}
 	err := cache.Put("testMap", "dummy", dummy)
@@ -87,21 +88,22 @@ func TestCache_Delete(t *testing.T) {
 	assertions.NoError(err)
 
 	deletedDummy, err := cache.Get("testMap", "dummy")
+	assertions.NoError(err)
 	assertions.Nil(deletedDummy)
 }
 
 func TestCache_AddListener(t *testing.T) {
-	var assertions = assert.New(t)
+	assertions := assert.New(t)
 
-	var listener = &MockListener[TestDummy]{}
-	var listenerDummy = TestDummy{Foo: "bar"}
+	listener := &MockListener[TestDummy]{}
+	listenerDummy := TestDummy{Foo: "bar"}
 
-	var err = cache.AddListener("testMap", listener)
+	err := cache.AddListener("testMap", listener)
 	assertions.NoError(err)
 
 	t.Run("Add", func(t *testing.T) {
-		var assertions = assert.New(t)
-		var err = cache.Put("testMap", "listenerDummy", listenerDummy)
+		assertions := assert.New(t)
+		err := cache.Put("testMap", "listenerDummy", listenerDummy)
 		assertions.NoError(err)
 		assertions.Eventually(func() bool {
 			return listener.onAddCalled
@@ -109,10 +111,10 @@ func TestCache_AddListener(t *testing.T) {
 	})
 
 	t.Run("Update", func(t *testing.T) {
-		var assertions = assert.New(t)
+		assertions := assert.New(t)
 		listenerDummy.Foo = "fizz"
 
-		var err = cache.Put("testMap", "listenerDummy", listenerDummy)
+		err := cache.Put("testMap", "listenerDummy", listenerDummy)
 		assertions.NoError(err)
 
 		assertions.Eventually(func() bool {
@@ -121,9 +123,9 @@ func TestCache_AddListener(t *testing.T) {
 	})
 
 	t.Run("Delete", func(t *testing.T) {
-		var assertions = assert.New(t)
+		assertions := assert.New(t)
 
-		var err = cache.Delete("testMap", "listenerDummy")
+		err := cache.Delete("testMap", "listenerDummy")
 		assertions.NoError(err)
 		assertions.Eventually(func() bool {
 			return listener.onDeleteCalled

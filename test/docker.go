@@ -1,4 +1,4 @@
-// Copyright 2024 Deutsche Telekom IT GmbH
+// Copyright 2025 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -8,12 +8,13 @@ package test
 
 import (
 	"context"
+	"log"
+	"time"
+
 	"github.com/hazelcast/hazelcast-go-client"
 	"github.com/hazelcast/hazelcast-go-client/cluster"
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
-	"log"
-	"time"
 )
 
 var (
@@ -22,7 +23,7 @@ var (
 
 	hazelcastImage = EnvOrDefault("HAZELCAST_IMAGE", "hazelcast/hazelcast")
 	hazelcastTag   = EnvOrDefault("HAZELCAST_TAG", "5.3.6")
-	hazelcastHost  = EnvOrDefault("HAZELCAST_HOST", "localhost")
+	hazelcastHost  = EnvOrDefault("HAZELCAST_HOST", "0.0.0.0")
 	hazelcastPort  = EnvOrDefault("HAZELCAST_PORT", "5701")
 )
 
@@ -42,17 +43,14 @@ func StartDocker() {
 
 	setupHazelcast()
 
-	err = pool.Retry(func() error {
-		return pingHazelcast()
-	})
-
+	err = pool.Retry(pingHazelcast)
 	if err != nil {
 		log.Fatalf("Could not reach hazelcast after several tries: %s", err)
 	}
 }
 
 func StopDocker() {
-	var err = pool.Purge(hazelcastContainer)
+	err := pool.Purge(hazelcastContainer)
 	if err != nil {
 		log.Fatalf("Could not purge hazelcast container: %s", err)
 	}
@@ -77,14 +75,13 @@ func setupHazelcast() {
 			Name: "no",
 		}
 	})
-
 	if err != nil {
 		log.Fatalf("Could not create hazelcast container:  %s", err)
 	}
 }
 
 func pingHazelcast() error {
-	var ctx = context.Background()
+	ctx := context.Background()
 	config := hazelcast.NewConfig()
 
 	config.Cluster.Name = "horizon"

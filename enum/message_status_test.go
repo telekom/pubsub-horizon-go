@@ -1,16 +1,17 @@
-// Copyright 2024 Deutsche Telekom IT GmbH
+// Copyright 2025 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
 
 package enum
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestParseMessageStatus(t *testing.T) {
-	var inputs = []struct {
+	inputs := []struct {
 		Value         string
 		Expected      MessageStatus
 		ExpectedError bool
@@ -27,7 +28,7 @@ func TestParseMessageStatus(t *testing.T) {
 
 	for _, input := range inputs {
 		t.Run(input.Value, func(t *testing.T) {
-			var assertions = assert.New(t)
+			assertions := assert.New(t)
 			msgStatus, err := ParseMessageStatus(input.Value)
 			assertions.Equal(input.Expected, msgStatus)
 			assertions.Equal(input.ExpectedError, err != nil)
@@ -36,7 +37,7 @@ func TestParseMessageStatus(t *testing.T) {
 }
 
 func TestMessageStatus_UnmarshalJSON(t *testing.T) {
-	var inputs = []struct {
+	inputs := []struct {
 		Value       string
 		Expected    MessageStatus
 		ExpectError bool
@@ -53,10 +54,10 @@ func TestMessageStatus_UnmarshalJSON(t *testing.T) {
 
 	for _, input := range inputs {
 		t.Run(input.Value, func(t *testing.T) {
-			var assertions = assert.New(t)
-			var messageStatus = new(MessageStatus)
+			assertions := assert.New(t)
+			messageStatus := new(MessageStatus)
 
-			var err = messageStatus.UnmarshalJSON([]byte(input.Value))
+			err := messageStatus.UnmarshalJSON([]byte(input.Value))
 			if input.ExpectError {
 				assertions.Error(err)
 			} else {
@@ -67,7 +68,7 @@ func TestMessageStatus_UnmarshalJSON(t *testing.T) {
 }
 
 func TestMessageStatus_MarshalJSON(t *testing.T) {
-	var inputs = []struct {
+	inputs := []struct {
 		Value    MessageStatus
 		Expected string
 	}{
@@ -82,7 +83,7 @@ func TestMessageStatus_MarshalJSON(t *testing.T) {
 
 	for _, input := range inputs {
 		t.Run(input.Value.String(), func(t *testing.T) {
-			var assertions = assert.New(t)
+			assertions := assert.New(t)
 			marshalled, err := input.Value.MarshalJSON()
 			assertions.NoError(err)
 			assertions.Equal(input.Expected, string(marshalled))

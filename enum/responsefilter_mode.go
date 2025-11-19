@@ -1,4 +1,4 @@
-// Copyright 2024 Deutsche Telekom IT GmbH
+// Copyright 2025 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -6,7 +6,6 @@ package enum
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 )
 
@@ -19,38 +18,20 @@ const (
 
 func ParseResponseFilterMode(s string) (ResponseFilterMode, error) {
 	switch strings.ToLower(s) {
-
 	case "include", "exclude":
 		return ResponseFilterMode(s), nil
 
 	default:
 		return "", fmt.Errorf("could not parse '%s' as response-filter-mode", s)
-
 	}
 }
 
 func (m *ResponseFilterMode) UnmarshalJSON(bytes []byte) error {
-	var data = string(bytes)
-
-	if data == "null" {
-		return nil
-	}
-
-	if strings.HasPrefix(data, `"`) && strings.HasSuffix(data, `"`) {
-		data, _ = strconv.Unquote(data)
-	}
-
-	rfm, err := ParseResponseFilterMode(data)
-	if err != nil {
-		return err
-	}
-
-	*m = rfm
-	return nil
+	return UnmarshalEnum(bytes, m, ParseResponseFilterMode)
 }
 
 func (m *ResponseFilterMode) MarshalJSON() ([]byte, error) {
-	var s = fmt.Sprintf(`"%s"`, m.String())
+	s := fmt.Sprintf(`"%s"`, m.String())
 	return []byte(s), nil
 }
 

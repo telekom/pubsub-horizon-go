@@ -1,4 +1,4 @@
-// Copyright 2024 Deutsche Telekom IT GmbH
+// Copyright 2025 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -7,8 +7,6 @@ package enum
 import (
 	"encoding/json"
 	"fmt"
-	"strconv"
-	"strings"
 )
 
 type EventRetentionTime string
@@ -35,7 +33,7 @@ var EventRetentionTimes = map[EventRetentionTime]struct {
 }
 
 func ParseEventRetentionTime(s string) (EventRetentionTime, error) {
-	for key, _ := range EventRetentionTimes {
+	for key := range EventRetentionTimes {
 		if string(key) == s {
 			return key, nil
 		}
@@ -44,23 +42,7 @@ func ParseEventRetentionTime(s string) (EventRetentionTime, error) {
 }
 
 func (ttl *EventRetentionTime) UnmarshalJSON(bytes []byte) error {
-	var data = string(bytes)
-
-	if data == "null" {
-		return nil
-	}
-
-	if strings.HasPrefix(data, `"`) && strings.HasSuffix(data, `"`) {
-		data, _ = strconv.Unquote(data)
-	}
-
-	eventRetentionTime, err := ParseEventRetentionTime(data)
-	if err != nil {
-		return err
-	}
-
-	*ttl = eventRetentionTime
-	return nil
+	return UnmarshalEnum(bytes, ttl, ParseEventRetentionTime)
 }
 
 func (ttl *EventRetentionTime) MarshalJSON() ([]byte, error) {
