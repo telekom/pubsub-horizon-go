@@ -3,7 +3,7 @@ module github.com/telekom/pubsub-horizon-go
 go 1.25.0
 
 require (
-	github.com/IBM/sarama v1.46.3
+	github.com/IBM/sarama v1.47.0
 	github.com/go-playground/validator/v10 v10.30.2
 	github.com/hazelcast/hazelcast-go-client v1.5.0
 	github.com/ory/dockertest/v3 v3.12.0
@@ -29,7 +29,6 @@ require (
 	github.com/docker/go-connections v0.5.0 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/eapache/go-resiliency v1.7.0 // indirect
-	github.com/eapache/go-xerial-snappy v0.0.0-20230731223053-c322873962e3 // indirect
 	github.com/eapache/queue v1.1.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.13 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
@@ -39,7 +38,6 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-viper/mapstructure/v2 v2.1.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/golang/snappy v1.0.0 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/go-uuid v1.0.3 // indirect
@@ -48,7 +46,7 @@ require (
 	github.com/jcmturner/gofork v1.7.6 // indirect
 	github.com/jcmturner/gokrb5/v8 v8.4.4 // indirect
 	github.com/jcmturner/rpc/v2 v2.0.3 // indirect
-	github.com/klauspost/compress v1.18.1 // indirect
+	github.com/klauspost/compress v1.18.4 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20251013123823-9fd1530e3ec3 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
@@ -59,7 +57,7 @@ require (
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.0 // indirect
 	github.com/opencontainers/runc v1.2.3 // indirect
-	github.com/pierrec/lz4/v4 v4.1.22 // indirect
+	github.com/pierrec/lz4/v4 v4.1.25 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
