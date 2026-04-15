@@ -7,7 +7,7 @@ require (
 	github.com/go-playground/validator/v10 v10.30.2
 	github.com/hazelcast/hazelcast-go-client v1.5.0
 	github.com/ory/dockertest/v3 v3.12.0
-	github.com/rs/zerolog v1.34.0
+	github.com/rs/zerolog v1.35.0
 	github.com/stretchr/testify v1.11.1
 	go.opentelemetry.io/contrib/propagators/b3 v1.40.0
 	go.opentelemetry.io/otel v1.40.0
