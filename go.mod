@@ -9,7 +9,7 @@ require (
 	github.com/ory/dockertest/v3 v3.12.0
 	github.com/rs/zerolog v1.35.0
 	github.com/stretchr/testify v1.11.1
-	go.opentelemetry.io/contrib/propagators/b3 v1.40.0
+	go.opentelemetry.io/contrib/propagators/b3 v1.43.0
 	go.opentelemetry.io/otel v1.43.0
 	go.opentelemetry.io/otel/sdk v1.43.0
 	go.opentelemetry.io/otel/trace v1.43.0
