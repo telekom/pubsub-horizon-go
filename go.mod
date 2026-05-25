@@ -3,7 +3,7 @@ module github.com/telekom/pubsub-horizon-go
 go 1.25.0
 
 require (
-	github.com/IBM/sarama v1.48.1
+	github.com/IBM/sarama v1.49.0
 	github.com/go-playground/validator/v10 v10.30.2
 	github.com/hazelcast/hazelcast-go-client v1.5.0
 	github.com/ory/dockertest/v3 v3.12.0
