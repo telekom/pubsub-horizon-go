@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/IBM/sarama v1.48.1
 	github.com/go-playground/validator/v10 v10.30.2
-	github.com/hazelcast/hazelcast-go-client v1.5.0
+	github.com/hazelcast/hazelcast-go-client v1.6.0
 	github.com/ory/dockertest/v3 v3.12.0
 	github.com/rs/zerolog v1.35.1
 	github.com/stretchr/testify v1.11.1
