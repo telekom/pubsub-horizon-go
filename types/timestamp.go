@@ -5,7 +5,6 @@
 package types
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -13,11 +12,8 @@ import (
 
 type Timestamp time.Time
 
-func (c *Timestamp) MarshalJSON() ([]byte, error) {
-	current := time.Time(*c)
-
-	s := fmt.Sprintf(`"%s"`, current.Format(time.RFC3339))
-	return []byte(s), nil
+func (c Timestamp) MarshalJSON() ([]byte, error) {
+	return time.Time(c).MarshalJSON()
 }
 
 func (c *Timestamp) UnmarshalJSON(bytes []byte) error {
